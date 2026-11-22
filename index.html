@@ -61,6 +61,10 @@ header.top {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
+.progress {
+  position: absolute; left: 0; bottom: 0; height: 2px; width: 0;
+  background: var(--ink); pointer-events: none;
+}
 .bar {
   max-width: 1080px; margin: 0 auto; padding: 18px 24px;
   display: flex; align-items: center; gap: 28px;
@@ -86,6 +90,11 @@ button.theme {
 }
 button.theme:hover { color: var(--ink); }
 main { max-width: 1080px; margin: 0 auto; padding: 0 24px 80px; }
+main.enter { animation: rise .5s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
 section { scroll-margin-top: 84px; }
 .hero { padding: 72px 0 28px; }
 .eyebrow {
@@ -132,9 +141,19 @@ a.item:hover h3, a.card:hover h3, .study a:hover h3 { text-decoration: underline
 .item p:last-child { margin-bottom: 0; }
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
 .card {
+  position: relative; overflow: hidden;
   background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
   padding: 24px 24px 22px; display: flex; flex-direction: column; min-height: 220px;
+  transition: border-color .2s ease, transform .2s ease;
 }
+.card::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(220px circle at var(--x, 50%) var(--y, 0%), color-mix(in srgb, var(--ink) 9%, transparent), transparent 68%);
+  opacity: 0; transition: opacity .25s ease;
+}
+.card:hover { border-color: color-mix(in srgb, var(--ink) 35%, var(--line)); transform: translateY(-3px); }
+.card:hover::before { opacity: 1; }
+.card > * { position: relative; }
 .card .when { padding-top: 0; margin-bottom: 14px; }
 .card h3 {
   font-family: "Instrument Serif", Georgia, serif;
@@ -181,12 +200,25 @@ footer a:hover { color: var(--ink); }
 .stats > div + div { padding-left: 18px; border-left: 1px solid var(--line); }
 .stats .v { font-family: "Instrument Serif", Georgia, serif; font-size: clamp(32px, 4vw, 46px); line-height: 1; font-variant-numeric: tabular-nums; }
 .stats .k { font-size: 13px; color: var(--muted); margin-top: 8px; }
-.years { display: grid; grid-template-columns: repeat(9, 1fr); gap: 8px; margin: 18px 0 0; }
+.years { display: grid; grid-template-columns: repeat(9, 1fr); gap: 8px; margin: 18px 0 0; align-items: end; }
 .years div { border-top: 1px solid var(--line); padding-top: 8px; }
+.years i {
+  display: block; height: calc(var(--p) * 3.4px); margin-bottom: 10px; border-radius: 2px 2px 0 0;
+  background: var(--ink); transform-origin: bottom; transform: scaleY(0);
+}
+.years.in i { animation: grow .7s cubic-bezier(.2,.7,.2,1) forwards; }
+.years i.oos { background: var(--good); }
+.years div:hover i { filter: brightness(1.3); }
+@keyframes grow { to { transform: scaleY(1); } }
 .years b { display: block; font-weight: 500; font-variant-numeric: tabular-nums; }
 .years span { color: var(--muted); font-size: 12px; }
 .pods { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 16px; }
-.pods article { border-top: 1px solid var(--ink); padding-top: 12px; }
+.pods article {
+  border-top: 1px solid var(--ink); padding: 12px 10px 4px 0; cursor: pointer;
+  transition: opacity .2s ease, background .2s ease;
+}
+.pods.is-picked article { opacity: .38; }
+.pods.is-picked article.on { opacity: 1; background: var(--surface); }
 .pods h3 { font-size: 15px; margin: 0 0 6px; }
 .pods p { margin: 0; color: var(--ink-2); font-size: 14px; }
 .case { margin-top: 36px; scroll-margin-top: 96px; }
@@ -207,8 +239,10 @@ ol.gate { list-style: none; margin: 8px 0 0; padding: 0; counter-reset: gate; }
 ol.gate li {
   counter-increment: gate;
   display: grid; grid-template-columns: 52px 1fr; gap: 8px 16px;
-  padding: 18px 0; border-top: 1px solid var(--line);
+  padding: 18px 0; border-top: 1px solid var(--line); cursor: pointer;
 }
+ol.gate li p { max-height: 0; overflow: hidden; opacity: 0; margin: 0; transition: max-height .35s ease, opacity .25s ease, margin .35s ease; }
+ol.gate li.open p { max-height: 14em; opacity: 1; margin-top: 4px; }
 ol.gate li::before {
   content: counter(gate, decimal-leading-zero);
   font-family: "Instrument Serif", Georgia, serif;
@@ -221,6 +255,13 @@ ol.gate p { margin: 0; color: var(--ink-2); max-width: 68ch; }
 figure.chart { margin: 0; }
 figure.chart h3 { font-size: 15px; font-weight: 600; margin: 0 0 8px; font-family: Inter, system-ui, sans-serif; }
 canvas.plot { width: 100%; height: 250px; display: block; }
+canvas.eq { cursor: crosshair; }
+.tip {
+  position: fixed; z-index: 20; pointer-events: none;
+  background: var(--ink); color: var(--page);
+  font-size: 12px; letter-spacing: .01em; font-variant-numeric: tabular-nums;
+  padding: 6px 8px; border-radius: 6px; white-space: nowrap;
+}
 .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; font-size: 12px; color: var(--muted); margin: 8px 0 0; }
 .swatch { width: 18px; height: 3px; display: inline-block; margin-right: 6px; vertical-align: middle; }
 .swatch.is { background: var(--ink); }
@@ -230,12 +271,73 @@ canvas.plot { width: 100%; height: 250px; display: block; }
 .mast .eyebrow { margin-bottom: 8px; }
 .mast h1 { margin: 0; }
 .mark { width: 104px; height: 104px; flex: none; display: block; }
+.hero-grid { display: grid; grid-template-columns: 1.35fr .75fr; gap: 56px; align-items: end; }
+.index { display: flex; flex-direction: column; }
+.index a {
+  display: grid; grid-template-columns: 32px 1fr; column-gap: 12px; row-gap: 2px;
+  padding: 14px 4px; border-top: 1px solid var(--line); text-decoration: none;
+  color: var(--ink); font-size: 16px;
+  transition: padding .2s ease, background .2s ease;
+}
+.index a:last-child { border-bottom: 1px solid var(--line); }
+.index a:hover { padding-left: 12px; background: var(--surface); }
+.index span { color: var(--muted); font-size: 12px; padding-top: 8px; font-variant-numeric: tabular-nums; }
+.index b { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 28px; line-height: 1; }
+.index a:hover b { font-style: italic; }
+.index em { grid-column: 2; font-style: normal; color: var(--muted); font-size: 13px; }
+.studio { display: grid; grid-template-columns: 300px 1fr; gap: 18px; margin-top: 22px; align-items: stretch; }
+.studio-nav { display: flex; flex-direction: column; }
+.studio-nav button {
+  appearance: none; background: transparent; color: inherit; font: inherit; text-align: left;
+  border: 0; border-top: 1px solid var(--line); padding: 14px 10px; cursor: pointer;
+  display: grid; grid-template-columns: 28px 1fr; gap: 2px 10px; align-items: baseline;
+}
+.studio-nav button:last-child { border-bottom: 1px solid var(--line); }
+.studio-nav button small { grid-column: 2; color: var(--muted); font-size: 12px; }
+.studio-nav button span { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.studio-nav button b { font-weight: 500; font-size: 15px; }
+.studio-nav button[aria-selected="true"] { background: var(--surface); }
+.studio-nav button[aria-selected="true"] b { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 22px; }
+.studio-panel {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+  padding: 28px 28px 24px; display: flex; flex-direction: column; min-height: 320px;
+}
+.studio-panel[hidden] { display: none; }
+.studio-panel h3 {
+  font-family: "Instrument Serif", Georgia, serif; font-weight: 400;
+  font-size: clamp(32px, 4vw, 44px); line-height: 1; margin: 0 0 12px;
+}
+.studio-panel p { margin: 0; color: var(--ink-2); max-width: 46em; }
+.studio-panel .pair { margin-top: auto; padding-top: 28px; display: flex; gap: 36px; }
+.studio-panel .sharpe {
+  font-family: "Instrument Serif", Georgia, serif; font-size: 52px; line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.studio-panel .sharpe span {
+  display: block; margin-top: 8px; font-family: Inter, system-ui, sans-serif;
+  font-size: 13px; color: var(--muted);
+}
+.studio-panel .open {
+  margin-top: 22px; align-self: flex-start; color: var(--ink); font-size: 14px;
+  text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px;
+}
+.studio-panel .open:hover { font-style: italic; }
+a.item { transition: background .2s ease; }
+a.item:hover { background: color-mix(in srgb, var(--surface) 70%, transparent); }
+a.item h3::after {
+  content: "→"; display: inline-block; margin-left: 8px; color: var(--muted);
+  transition: transform .2s ease;
+}
+a.item:hover h3::after { transform: translateX(4px); }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .mark { filter: invert(1); }
 }
 :root[data-theme="dark"] .mark { filter: invert(1); }
 @media (max-width: 800px) {
-  .item, .cards, .study, .skills, .stats, .pods, .mech { grid-template-columns: 1fr 1fr; }
+  .item, .cards, .study, .skills, .stats, .pods, .mech, .hero-grid, .studio { grid-template-columns: 1fr 1fr; }
+  .hero-grid, .studio { grid-template-columns: 1fr; }
+  .studio-nav { flex-direction: row; overflow-x: auto; }
+  .studio-nav button { min-width: 168px; border-bottom: 1px solid var(--line); }
   .plots, .plots .wide { grid-template-columns: 1fr; grid-column: auto; }
   .years { grid-template-columns: repeat(3, 1fr); }
   .stats > div + div { border-left: 0; padding-left: 0; }
@@ -257,11 +359,20 @@ canvas.plot { width: 100%; height: 250px; display: block; }
   .hero { padding-top: 132px; }
   .explore { grid-template-columns: 1fr; }
   .mark { width: 72px; height: 72px; }
+  .studio-nav { flex-direction: column; overflow: visible; }
+  .studio-nav button { min-width: 0; }
+  .studio-panel .sharpe { font-size: 40px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  main.enter, .years i, .card, a.item h3::after, .index a, ol.gate li p { animation: none; transition: none; }
+  .years i { transform: none; }
+  .card:hover { transform: none; }
 }
 </style>
 </head>
 <body>
 <header class="top">
+  <div class="progress" id="progress"></div>
   <div class="bar">
     <a class="brand" href="#top">BENJAMIN LI</a>
     <nav>
@@ -335,7 +446,7 @@ canvas.plot { width: 100%; height: 250px; display: block; }
     <div class="plots">
       <figure class="chart wide">
         <h3>Weekly equity, in sample and holdout</h3>
-        <canvas class="plot" id="bookEq" aria-label="Weekly equity of the book, split at 2023"></canvas>
+        <canvas class="plot eq" id="bookEq" aria-label="Weekly equity of the book, split at 2023"></canvas>
         <p class="legend"><span><i class="swatch is"></i>In sample, through 2022</span><span><i class="swatch oos"></i>Holdout, from 2023</span></p>
         <figcaption class="note">Weekly equity, 5 January 2018 to 19 June 2026, ending at $1,183,160. The colour changes on the first week of 2023. Through 2022 the book’s Sharpe was 2.05 and its CAGR 10.5%. From 2023 through 18 June 2026, Sharpe 2.16 and CAGR 11.1%. Every calendar year in the window finished higher.</figcaption>
       </figure>
@@ -486,7 +597,7 @@ canvas.plot { width: 100%; height: 250px; display: block; }
       <div class="plots">
         <figure class="chart wide">
           <h3>Sakuraba equity</h3>
-          <canvas class="plot" id="sakEq" aria-label="Sakuraba cumulative profit, in sample and holdout"></canvas>
+          <canvas class="plot eq" id="sakEq" aria-label="Sakuraba cumulative profit, in sample and holdout"></canvas>
           <p class="legend"><span><i class="swatch is"></i>Development, 2010–2022</span><span><i class="swatch oos"></i>Holdout, from 2023</span></p>
           <figcaption class="note">Cumulative net P&amp;L of one yen future, weekly. It ends at $55,885 on 13 November 2026, which is the development $54,657 plus the holdout $1,227.</figcaption>
         </figure>
@@ -516,58 +627,80 @@ canvas.plot { width: 100%; height: 250px; display: block; }
 </main>
 <main id="home">
   <section class="hero" id="top">
-    <p class="eyebrow">Quantitative research · London</p>
-    <h1>Benjamin <em>Li</em></h1>
-    <p class="lede">I work on AI for systematic trading. The research is deep reinforcement learning for building portfolios and for deciding which signals to take, and the standard around it: no lookahead, costs on every fill, and a result that still holds on data it was not fit on.</p>
-    <p class="lede">Mosaic Alpha Research is the futures book I built for that standard. A rule is written down before it is tested. It pays one tick of slippage and $0.95 of commission. It joins a pod only after a fixed gate, and the holdout from 2023 is opened once.</p>
-    <p class="meta">
-      <span>UCL, MEng Robotics &amp; Artificial Intelligence, 2023–2027</span>
-      <span>English and Mandarin</span>
-      <span><a href="mailto:benjamin.li.23@ucl.ac.uk">benjamin.li.23@ucl.ac.uk</a></span>
-      <span><a href="https://www.linkedin.com/in/benjaminbiweili">LinkedIn</a></span>
-    </p>
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Quantitative research · London</p>
+        <h1>Benjamin <em>Li</em></h1>
+        <p class="lede">I work on AI for systematic trading. The research is deep reinforcement learning for building portfolios and for deciding which signals to take, and the standard around it: no lookahead, costs on every fill, and a result that still holds on data it was not fit on.</p>
+        <p class="lede">Mosaic Alpha Research is the futures book I built for that standard. A rule is written down before it is tested. It pays one tick of slippage and $0.95 of commission. It joins a pod only after a fixed gate, and the holdout from 2023 is opened once.</p>
+        <p class="meta">
+          <span>UCL, MEng Robotics &amp; Artificial Intelligence, 2023–2027</span>
+          <span>English and Mandarin</span>
+          <span><a href="mailto:benjamin.li.23@ucl.ac.uk">benjamin.li.23@ucl.ac.uk</a></span>
+          <span><a href="https://www.linkedin.com/in/benjaminbiweili">LinkedIn</a></span>
+        </p>
+      </div>
+      <nav class="index" aria-label="Portfolio">
+        <a href="#work"><span>01</span><b>Work</b><em>Prediction markets and PredictNow</em></a>
+        <a href="#competitions"><span>02</span><b>Competitions</b><em>Chessathon and Battlecode</em></a>
+        <a href="#projects"><span>03</span><b>Projects</b><em>Models, engines, and Mosaic</em></a>
+        <a href="#mosaic"><span>04</span><b>Mosaic</b><em>The futures book and the gate</em></a>
+      </nav>
+    </div>
   </section>
 
   <section class="block" id="cases">
     <div class="block-head"><h2>Explore the case studies</h2></div>
     <p class="lede">Four forced flows from the futures book. Holdout is 2023 to 13 November 2026. Development is through 2022. Both Sharpes are after costs.</p>
-    <div class="cards explore">
-      <a class="card case-link" href="#hedge-band">
-        <div class="when">Pound future · London fix</div>
-        <h3>Hedge-band reset</h3>
-        <p>Pound-hedged funds must reset a dollar hedge the day after it leaves the regulatory band. They deal into the London fix.</p>
-        <div class="pair">
-          <div class="sharpe">0.84<span>Holdout Sharpe</span></div>
-          <div class="sharpe">1.13<span>Dev Sharpe</span></div>
-        </div>
-      </a>
-      <a class="card case-link" href="#unwind">
-        <div class="when">Pound future</div>
-        <h3>Leveraged-fund unwind</h3>
-        <p>When equities fall, leveraged funds cut pound exposure and their dealers unwind with them. The dislocation fades afterwards.</p>
-        <div class="pair">
-          <div class="sharpe">0.99<span>Holdout Sharpe</span></div>
-          <div class="sharpe">0.53<span>Dev Sharpe</span></div>
-        </div>
-      </a>
-      <a class="card case-link" href="#auction">
-        <div class="when">Euro future</div>
-        <h3>Treasury auction</h3>
-        <p>A surprise in auction demand is absorbed by arbitrageurs who hold Treasuries and currencies together. The euro moves with that demand.</p>
-        <div class="pair">
-          <div class="sharpe">0.38<span>Holdout Sharpe</span></div>
-          <div class="sharpe">0.66<span>Dev Sharpe</span></div>
-        </div>
-      </a>
-      <a class="card case-link" href="#gotobi">
-        <div class="when">Yen future · Tokyo fix</div>
-        <h3>Gotobi</h3>
-        <p>Japanese importers settle on fixed dates. Their banks buy dollars into the 09:55 Tokyo fix, so USD/JPY is pushed up into it.</p>
-        <div class="pair">
-          <div class="sharpe">0.24<span>Holdout Sharpe</span></div>
-          <div class="sharpe">1.67<span>Dev Sharpe</span></div>
-        </div>
-      </a>
+    <div class="studio">
+      <div class="studio-nav" role="tablist" aria-label="Case studies">
+        <button type="button" role="tab" id="tab-hedge" aria-controls="panel-hedge" aria-selected="true"><span>01</span><b>Hedge-band reset</b><small>Pound · 0.84 holdout</small></button>
+        <button type="button" role="tab" id="tab-unwind" aria-controls="panel-unwind" aria-selected="false"><span>02</span><b>Leveraged-fund unwind</b><small>Pound · 0.99 holdout</small></button>
+        <button type="button" role="tab" id="tab-auction" aria-controls="panel-auction" aria-selected="false"><span>03</span><b>Treasury auction</b><small>Euro · 0.38 holdout</small></button>
+        <button type="button" role="tab" id="tab-gotobi" aria-controls="panel-gotobi" aria-selected="false"><span>04</span><b>Gotobi</b><small>Yen · 0.24 holdout</small></button>
+      </div>
+      <div>
+        <article class="studio-panel" id="panel-hedge" role="tabpanel" aria-labelledby="tab-hedge">
+          <div class="when">Pound future · London fix</div>
+          <h3>Hedge-band reset</h3>
+          <p>Pound-hedged funds must reset a dollar hedge the day after it leaves the regulatory band. They deal into the London fix.</p>
+          <div class="pair">
+            <div class="sharpe">0.84<span>Holdout Sharpe</span></div>
+            <div class="sharpe">1.13<span>Dev Sharpe</span></div>
+          </div>
+          <a class="open" href="#hedge-band">Open the case</a>
+        </article>
+        <article class="studio-panel" id="panel-unwind" role="tabpanel" aria-labelledby="tab-unwind" hidden>
+          <div class="when">Pound future</div>
+          <h3>Leveraged-fund unwind</h3>
+          <p>When equities fall, leveraged funds cut pound exposure and their dealers unwind with them. The dislocation fades afterwards.</p>
+          <div class="pair">
+            <div class="sharpe">0.99<span>Holdout Sharpe</span></div>
+            <div class="sharpe">0.53<span>Dev Sharpe</span></div>
+          </div>
+          <a class="open" href="#unwind">Open the case</a>
+        </article>
+        <article class="studio-panel" id="panel-auction" role="tabpanel" aria-labelledby="tab-auction" hidden>
+          <div class="when">Euro future</div>
+          <h3>Treasury auction</h3>
+          <p>A surprise in auction demand is absorbed by arbitrageurs who hold Treasuries and currencies together. The euro moves with that demand.</p>
+          <div class="pair">
+            <div class="sharpe">0.38<span>Holdout Sharpe</span></div>
+            <div class="sharpe">0.66<span>Dev Sharpe</span></div>
+          </div>
+          <a class="open" href="#auction">Open the case</a>
+        </article>
+        <article class="studio-panel" id="panel-gotobi" role="tabpanel" aria-labelledby="tab-gotobi" hidden>
+          <div class="when">Yen future · Tokyo fix</div>
+          <h3>Gotobi</h3>
+          <p>Japanese importers settle on fixed dates. Their banks buy dollars into the 09:55 Tokyo fix, so USD/JPY is pushed up into it.</p>
+          <div class="pair">
+            <div class="sharpe">0.24<span>Holdout Sharpe</span></div>
+            <div class="sharpe">1.67<span>Dev Sharpe</span></div>
+          </div>
+          <a class="open" href="#gotobi">Open the case</a>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -741,7 +874,10 @@ function yOf(v, min, max, pad, h) {
   return pad.t + (1 - (v - min) / span) * (h - pad.t - pad.b);
 }
 
-function equity(canvas, dates, values, split, step) {
+const series = new WeakMap();
+const hoverAt = new WeakMap();
+
+function equity(canvas, dates, values, split, step, hover) {
   const box = frame(canvas);
   if (!box) return;
   const { g, w, h } = box;
@@ -798,6 +934,21 @@ function equity(canvas, dates, values, split, step) {
   }
   stroke(0, cut, c.ink);
   stroke(cut, dates.length - 1, c.good);
+  if (hover >= 0 && hover < dates.length) {
+    const x = xOf(hover, dates.length, pad, w);
+    const y = yOf(values[hover], lo, hi, pad, h);
+    g.strokeStyle = c.ink2;
+    g.lineWidth = 1;
+    g.beginPath();
+    g.moveTo(x, pad.t);
+    g.lineTo(x, h - pad.b);
+    g.stroke();
+    g.fillStyle = hover < cut ? c.ink : c.good;
+    g.beginPath();
+    g.arc(x, y, 3.5, 0, Math.PI * 2);
+    g.fill();
+  }
+  series.set(canvas, { dates, values, pad });
   g.fillStyle = c.muted;
   g.textAlign = "left";
   g.textBaseline = "bottom";
@@ -913,10 +1064,12 @@ function draw() {
   if (!charts || lab.hidden) return;
   const book = charts.book;
   const bookCut = book.dates.findIndex((d) => d >= book.split);
-  equity(document.getElementById("bookEq"), book.dates, book.equity, bookCut, false);
+  const bookEq = document.getElementById("bookEq");
+  const sakEq = document.getElementById("sakEq");
+  equity(bookEq, book.dates, book.equity, bookCut, false, hoverAt.get(bookEq) ?? -1);
   const sak = charts.sakuraba;
   const sakCut = sak.segment.findIndex((s) => s !== "dev");
-  equity(document.getElementById("sakEq"), sak.dates, sak.equity, sakCut, false);
+  equity(sakEq, sak.dates, sak.equity, sakCut, false, hoverAt.get(sakEq) ?? -1);
   histogram(document.getElementById("sakPerm"), sak.perm, sak.perm_actual);
   histogram(document.getElementById("sakBoot"), sak.boot, sak.boot_actual);
   histogram(document.getElementById("sakTime"), sak.timing, sak.timing_actual);
@@ -1091,15 +1244,24 @@ function renderPiece(p) {
   });
 }
 
+let shownPage = "";
 function route() {
   const hash = location.hash;
   const caseId = ["#gotobi", "#hedge-band", "#unwind", "#auction"].includes(hash) ? hash : "";
   const piece = pieces[hash.slice(1)];
   const page = hash === "#competitions" ? "competitions" : (hash === "#mosaic" || caseId ? "mosaic" : (piece ? "read" : "home"));
+  const arriving = page !== shownPage;
+  shownPage = page;
   home.hidden = page !== "home";
   competitions.hidden = page !== "competitions";
   lab.hidden = page !== "mosaic";
   read.hidden = page !== "read";
+  if (arriving && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const shown = page === "home" ? home : page === "competitions" ? competitions : page === "mosaic" ? lab : read;
+    shown.classList.remove("enter");
+    void shown.offsetWidth;
+    shown.classList.add("enter");
+  }
   if (piece) renderPiece(piece);
   document.querySelectorAll("nav a, a.aside").forEach((a) => {
     const href = a.getAttribute("href");
@@ -1122,9 +1284,188 @@ function route() {
     });
   }
 }
+const tip = document.createElement("div");
+tip.className = "tip";
+tip.hidden = true;
+document.body.appendChild(tip);
+
+function redrawEquity(canvas) {
+  if (!charts) return;
+  if (canvas.id === "bookEq") {
+    const book = charts.book;
+    equity(canvas, book.dates, book.equity, book.dates.findIndex((d) => d >= book.split), false, hoverAt.get(canvas) ?? -1);
+  } else if (canvas.id === "sakEq") {
+    const sak = charts.sakuraba;
+    equity(canvas, sak.dates, sak.equity, sak.segment.findIndex((s) => s !== "dev"), false, hoverAt.get(canvas) ?? -1);
+  }
+}
+document.querySelectorAll("canvas.eq").forEach((canvas) => {
+  canvas.addEventListener("pointermove", (e) => {
+    const s = series.get(canvas);
+    if (!s) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const { pad, dates, values } = s;
+    if (x < pad.l || x > rect.width - pad.r) { tip.hidden = true; return; }
+    let i = Math.round(((x - pad.l) / (rect.width - pad.l - pad.r)) * (dates.length - 1));
+    i = Math.max(0, Math.min(dates.length - 1, i));
+    if (hoverAt.get(canvas) !== i) {
+      hoverAt.set(canvas, i);
+      redrawEquity(canvas);
+    }
+    tip.hidden = false;
+    tip.textContent = dates[i] + "  ·  " + exact(values[i]);
+    tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 12) + "px";
+    tip.style.top = Math.min(e.clientY + 16, innerHeight - 32) + "px";
+  });
+  canvas.addEventListener("pointerleave", () => {
+    tip.hidden = true;
+    hoverAt.set(canvas, -1);
+    redrawEquity(canvas);
+  });
+});
+
+const tabs = [...document.querySelectorAll(".studio-nav [role=tab]")];
+function selectTab(tab) {
+  tabs.forEach((t) => {
+    const on = t === tab;
+    t.setAttribute("aria-selected", on ? "true" : "false");
+    document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+  });
+}
+tabs.forEach((tab, i) => {
+  tab.addEventListener("click", () => selectTab(tab));
+  tab.addEventListener("keydown", (e) => {
+    const dir = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : (e.key === "ArrowUp" || e.key === "ArrowLeft" ? -1 : 0);
+    if (!dir) return;
+    e.preventDefault();
+    const next = tabs[(i + dir + tabs.length) % tabs.length];
+    selectTab(next);
+    next.focus();
+  });
+});
+
+document.querySelectorAll("ol.gate li").forEach((li, i) => {
+  li.tabIndex = 0;
+  li.setAttribute("role", "button");
+  li.setAttribute("aria-expanded", i === 0 ? "true" : "false");
+  if (i === 0) li.classList.add("open");
+  const toggle = () => {
+    const open = !li.classList.contains("open");
+    document.querySelectorAll("ol.gate li").forEach((step) => {
+      step.classList.remove("open");
+      step.setAttribute("aria-expanded", "false");
+    });
+    if (open) {
+      li.classList.add("open");
+      li.setAttribute("aria-expanded", "true");
+    }
+  };
+  li.addEventListener("click", toggle);
+  li.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+  });
+});
+
+const podGrid = document.querySelector(".pods");
+podGrid.querySelectorAll("article").forEach((article) => {
+  article.tabIndex = 0;
+  article.setAttribute("role", "button");
+  article.setAttribute("aria-pressed", "false");
+  const toggle = () => {
+    const on = article.classList.contains("on");
+    podGrid.querySelectorAll("article").forEach((a) => {
+      a.classList.remove("on");
+      a.setAttribute("aria-pressed", "false");
+    });
+    if (on) podGrid.classList.remove("is-picked");
+    else {
+      article.classList.add("on");
+      article.setAttribute("aria-pressed", "true");
+      podGrid.classList.add("is-picked");
+    }
+  };
+  article.addEventListener("click", toggle);
+  article.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+  });
+});
+
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const yearGrid = document.querySelector(".years");
+yearGrid.querySelectorAll("div").forEach((d, i) => {
+  const pct = parseFloat(d.querySelector("b").textContent);
+  const bar = document.createElement("i");
+  bar.style.setProperty("--p", String(pct));
+  if (i >= 5) bar.classList.add("oos");
+  d.prepend(bar);
+});
+if (reduceMotion) yearGrid.classList.add("in");
+else new IntersectionObserver((entries) => {
+  entries.forEach((en) => { if (en.isIntersecting) yearGrid.classList.add("in"); });
+}, { threshold: 0.4 }).observe(yearGrid);
+
+document.querySelectorAll(".card").forEach((card) => {
+  card.addEventListener("pointermove", (e) => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty("--x", (e.clientX - r.left) + "px");
+    card.style.setProperty("--y", (e.clientY - r.top) + "px");
+  });
+});
+
+function countUp(el) {
+  if (el.dataset.counted) return;
+  const raw = el.textContent.trim();
+  const m = raw.match(/^(−|-)?\$?([\d,]+(?:\.\d+)?)(m|%)?$/);
+  el.dataset.counted = "1";
+  if (!m || reduceMotion) return;
+  const neg = !!m[1];
+  const num = parseFloat(m[2].replace(/,/g, ""));
+  const suffix = m[3] || "";
+  const dollar = raw.includes("$");
+  const decimals = (m[2].split(".")[1] || "").length;
+  const commas = m[2].includes(",");
+  const t0 = performance.now();
+  function tick(now) {
+    const t = Math.min(1, (now - t0) / 700);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const v = num * eased;
+    const body = commas ? Math.round(v).toLocaleString("en-US") : (decimals ? v.toFixed(decimals) : String(Math.round(v)));
+    el.textContent = (neg ? "−" : "") + (dollar ? "$" : "") + body + suffix;
+    if (t < 1) requestAnimationFrame(tick);
+    else el.textContent = raw;
+  }
+  requestAnimationFrame(tick);
+}
+const counter = new IntersectionObserver((entries) => {
+  entries.forEach((en) => { if (en.isIntersecting) countUp(en.target); });
+}, { threshold: 0.7 });
+document.querySelectorAll(".stats .v").forEach((el) => counter.observe(el));
+
+const progressEl = document.getElementById("progress");
+function onScroll() {
+  tip.hidden = true;
+  const max = document.documentElement.scrollHeight - innerHeight;
+  progressEl.style.width = (max > 0 ? (scrollY / max) * 100 : 0) + "%";
+  if (home.hidden) return;
+  let current = "";
+  ["study", "projects", "work"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!current && el && el.getBoundingClientRect().top < 180) current = "#" + id;
+  });
+  document.querySelectorAll("nav a").forEach((a) => {
+    const href = a.getAttribute("href");
+    if (!["#work", "#projects", "#study"].includes(href)) return;
+    if (href === current) a.setAttribute("aria-current", "page");
+    else a.removeAttribute("aria-current");
+  });
+}
+window.addEventListener("scroll", onScroll, { passive: true });
+
 window.addEventListener("hashchange", route);
 window.addEventListener("resize", draw);
 route();
+onScroll();
 fetch("data/charts.json").then((r) => r.json()).then((c) => {
   charts = c;
   draw();
