@@ -144,8 +144,11 @@ a.item:hover h3, a.card:hover h3, .study a:hover h3 { text-decoration: underline
 .card .foot { margin-top: auto; padding-top: 18px; color: var(--muted); font-size: 13px; }
 a.case-link { text-decoration: none; color: inherit; }
 a.case-link:hover { border-color: var(--ink); }
-a.case-link .sharpe {
+a.case-link .pair {
   margin-top: auto; padding-top: 22px;
+  display: flex; gap: 28px;
+}
+a.case-link .sharpe {
   font-family: "Instrument Serif", Georgia, serif;
   font-size: 46px; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums;
 }
@@ -402,7 +405,67 @@ canvas.plot { width: 100%; height: 250px; display: block; }
     </ol>
   </section>
 
-  <section class="block">
+  <section class="block" id="flows">
+    <div class="block-head"><h2>Four forced flows</h2></div>
+    <p class="lede">One strategy on each flow, one contract, after costs. Development runs through 2022. The holdout is 1 January 2023 to 13 November 2026, opened once.</p>
+
+    <article class="case" id="hedge-band">
+      <p class="eyebrow">Case study · pound future</p>
+      <h3>Hedge-band reset</h3>
+      <p>Managers of pound-hedged UCITS share classes hold US assets and keep a dollar hedge against them. The regulation requires that hedge to stay inside a band, and to be reset the next business day once it leaves the band. Those managers deal into the London 4pm fix. After US equities rise they buy pounds. After equities fall they sell pounds.</p>
+      <div class="mech">
+        <div><b>Actor</b>Managers of pound-hedged share classes</div>
+        <div><b>Forced trade</b>Reset the dollar hedge once it leaves the band</div>
+        <div><b>Timing</b>The next business day, into the London fix</div>
+        <div><b>Sign</b>Equities up, buy pounds. Equities down, sell them</div>
+      </div>
+      <div class="stats">
+        <div><div class="v">$8,657</div><div class="k">Dev net, 85 trades, 2010–2022</div></div>
+        <div><div class="v">1.13</div><div class="k">Dev Sharpe</div></div>
+        <div><div class="v">$941</div><div class="k">Holdout net, 16 trades</div></div>
+        <div><div class="v">0.84</div><div class="k">Holdout Sharpe</div></div>
+      </div>
+      <p class="note">Lookahead clean. Roll P&amp;L $0. Extra-tick slippage, the Monte Carlo and the random-timing null all passed. Sixteen holdout trades. Measured 16 November 2026.</p>
+    </article>
+
+    <article class="case" id="unwind">
+      <p class="eyebrow">Case study · pound future</p>
+      <h3>Leveraged-fund unwind</h3>
+      <p>Leveraged funds in the pound future have to cut risk when equities fall, and the dealers on the other side unwind the hedges they were carrying against those funds. That unwind pushes the pound, and the push fades over the following days. The strategy takes the other side of the unwind.</p>
+      <div class="mech">
+        <div><b>Actor</b>Leveraged funds, and the dealers who hedge them</div>
+        <div><b>Forced trade</b>Funds cut currency risk, dealers unwind with them</div>
+        <div><b>Timing</b>The week equities fall, fading over the days after</div>
+        <div><b>Sign</b>Opposite the direction of the unwind</div>
+      </div>
+      <div class="stats">
+        <div><div class="v">$9,627</div><div class="k">Dev net, 70 trades, 2010–2022</div></div>
+        <div><div class="v">0.53</div><div class="k">Dev Sharpe</div></div>
+        <div><div class="v">$5,083</div><div class="k">Holdout net, 31 trades</div></div>
+        <div><div class="v">0.99</div><div class="k">Holdout Sharpe</div></div>
+      </div>
+      <p class="note">Lookahead clean. Roll P&amp;L was −$588 in development and −$19 in the holdout. Extra-tick slippage, the Monte Carlo and the random-timing null all passed. Measured 16 November 2026.</p>
+    </article>
+
+    <article class="case" id="auction">
+      <p class="eyebrow">Case study · euro future</p>
+      <h3>Treasury auction</h3>
+      <p>Treasury coupon auctions announce the supply in advance, so the price at the close is a surprise in demand. The arbitrageurs who absorb that demand hold Treasuries and currencies together, and the dollar moves with them over the following sessions. More demand for Treasuries goes with a weaker dollar, so the euro rises. Less demand, and the euro falls.</p>
+      <div class="mech">
+        <div><b>Actor</b>Bidders at Treasury coupon auctions</div>
+        <div><b>Forced trade</b>Arbitrageurs absorb a demand shock they did not choose</div>
+        <div><b>Timing</b>From the auction close, over the following sessions</div>
+        <div><b>Sign</b>More Treasury demand, the euro rises</div>
+      </div>
+      <div class="stats">
+        <div><div class="v">$97,401</div><div class="k">Dev net, 519 trades, 2010–2022</div></div>
+        <div><div class="v">0.66</div><div class="k">Dev Sharpe</div></div>
+        <div><div class="v">$12,275</div><div class="k">Holdout net, 158 trades</div></div>
+        <div><div class="v">0.38</div><div class="k">Holdout Sharpe</div></div>
+      </div>
+      <p class="note">Of the development net, $7,209 came from holding across contract rolls, leaving $90,191. Of the holdout net, $3,872 came from rolls, leaving $8,403. Lookahead clean. Extra-tick slippage, the Monte Carlo and the random-timing null all passed. Measured 16 November 2026.</p>
+    </article>
+
     <article class="case" id="gotobi">
       <p class="eyebrow">Case study · Sakuraba</p>
       <h3>Gotobi dollar buying</h3>
@@ -449,53 +512,6 @@ canvas.plot { width: 100%; height: 250px; display: block; }
         </figure>
       </div>
     </article>
-
-    <article class="case" id="london-fix">
-      <p class="eyebrow">Case study</p>
-      <h3>Month-end London fix</h3>
-      <p>The 16:00 London fix is the customer reference rate. At month-end, pound buy-backs cluster there: a high fix lets banks fill those purchases at a high price, so GBP/USD is bought into the fix. One pound future sits on that flow. The charts are the checks it cleared.</p>
-      <div class="mech">
-        <div><b>Actor</b>Customers buying pounds back</div>
-        <div><b>Forced trade</b>Banks lift GBP/USD to fill them</div>
-        <div><b>Timing</b>Into the month-end 16:00 London fix</div>
-        <div><b>Sign</b>GBP/USD up into the fix</div>
-      </div>
-      <div class="stats">
-        <div><div class="v">$7,985</div><div class="k">Dev net, 147 trades, 12.5 years</div></div>
-        <div><div class="v">0.79</div><div class="k">Dev Sharpe</div></div>
-        <div><div class="v">$1,520</div><div class="k">Holdout net, 45 trades</div></div>
-        <div><div class="v">0.67</div><div class="k">Holdout Sharpe, 2023 to 13 Nov 2026</div></div>
-      </div>
-      <p class="note">Lookahead clean, roll P&amp;L $0, and the closest daily-return correlation with another family was 0.15. Measured 15 November 2026.</p>
-      <div class="plots">
-        <figure class="chart wide">
-          <h3>Equity, marked to the session</h3>
-          <canvas class="plot" id="lonEq" aria-label="Month-end London fix cumulative profit, in sample and holdout"></canvas>
-          <p class="legend"><span><i class="swatch is"></i>In sample, from 2018</span><span><i class="swatch oos"></i>Holdout, from 2023</span></p>
-          <figcaption class="note">Cumulative P&amp;L from daily returns, 1 January 2018 to 13 November 2026. The series starts in 2018, so the grey part is the later years of a development window that begins in 2010. The $7,985 above is that full window. The green part is the holdout. Closed-trade holdout over the same dates is $1,520.</figcaption>
-        </figure>
-        <figure class="chart">
-          <h3>Direction shuffle, 2,000 books</h3>
-          <canvas class="plot" id="lonPerm" aria-label="Histogram of shuffled London-fix trade directions"></canvas>
-          <figcaption class="note">The 147 development trades, signs shuffled. The null tops out at $7,048. The real $7,985 is the green line. None of the 2,000 reached it.</figcaption>
-        </figure>
-        <figure class="chart">
-          <h3>Bootstrap of the same trades</h3>
-          <canvas class="plot" id="lonBoot" aria-label="Histogram of bootstrap resamples of the London-fix trades"></canvas>
-          <figcaption class="note">1,997 of the 2,000 resamples finished positive, 99.85%, against a bar of 95%. The green line is the real $7,985.</figcaption>
-        </figure>
-        <figure class="chart">
-          <h3>Random sessions, 1,000 books</h3>
-          <canvas class="plot" id="lonTime" aria-label="Histogram of London-fix trades moved to random sessions"></canvas>
-          <figcaption class="note">Moved to random sessions, side and holding length kept. On this test’s open-to-close prices the real timing made $6,523. The null tops out at $3,185. None of the 1,000 books beat it, so the p-value is 0.</figcaption>
-        </figure>
-        <figure class="chart">
-          <h3>Slippage, per fill</h3>
-          <canvas class="plot" id="lonSlip" aria-label="London-fix net profit at one, two and three ticks"></canvas>
-          <figcaption class="note">Base, one tick per fill: $7,985. One extra tick, the gate: $6,148. Two extra ticks, not a gate: $4,310.</figcaption>
-        </figure>
-      </div>
-    </article>
   </section>
 </main>
 <main id="home">
@@ -514,19 +530,43 @@ canvas.plot { width: 100%; height: 250px; display: block; }
 
   <section class="block" id="cases">
     <div class="block-head"><h2>Explore the case studies</h2></div>
-    <p class="lede">Two forced flows from the futures book. Each Sharpe is the holdout, from 2023, after costs.</p>
+    <p class="lede">Four forced flows from the futures book. Holdout is 2023 to 13 November 2026. Development is through 2022. Both Sharpes are after costs.</p>
     <div class="cards explore">
+      <a class="card case-link" href="#hedge-band">
+        <div class="when">Pound future · London fix</div>
+        <h3>Hedge-band reset</h3>
+        <p>Pound-hedged funds must reset a dollar hedge the day after it leaves the regulatory band. They deal into the London fix.</p>
+        <div class="pair">
+          <div class="sharpe">0.84<span>Holdout Sharpe</span></div>
+          <div class="sharpe">1.13<span>Dev Sharpe</span></div>
+        </div>
+      </a>
+      <a class="card case-link" href="#unwind">
+        <div class="when">Pound future</div>
+        <h3>Leveraged-fund unwind</h3>
+        <p>When equities fall, leveraged funds cut pound exposure and their dealers unwind with them. The dislocation fades afterwards.</p>
+        <div class="pair">
+          <div class="sharpe">0.99<span>Holdout Sharpe</span></div>
+          <div class="sharpe">0.53<span>Dev Sharpe</span></div>
+        </div>
+      </a>
+      <a class="card case-link" href="#auction">
+        <div class="when">Euro future</div>
+        <h3>Treasury auction</h3>
+        <p>A surprise in auction demand is absorbed by arbitrageurs who hold Treasuries and currencies together. The euro moves with that demand.</p>
+        <div class="pair">
+          <div class="sharpe">0.38<span>Holdout Sharpe</span></div>
+          <div class="sharpe">0.66<span>Dev Sharpe</span></div>
+        </div>
+      </a>
       <a class="card case-link" href="#gotobi">
         <div class="when">Yen future · Tokyo fix</div>
         <h3>Gotobi</h3>
         <p>Japanese importers settle on fixed dates. Their banks buy dollars into the 09:55 Tokyo fix, so USD/JPY is pushed up into it.</p>
-        <div class="sharpe">0.24<span>Holdout Sharpe</span></div>
-      </a>
-      <a class="card case-link" href="#london-fix">
-        <div class="when">Pound future · London fix</div>
-        <h3>Month-end London fix</h3>
-        <p>At month-end, customers buy pounds back into the 16:00 London fix, and banks lift GBP/USD to fill those orders.</p>
-        <div class="sharpe">0.67<span>Holdout Sharpe</span></div>
+        <div class="pair">
+          <div class="sharpe">0.24<span>Holdout Sharpe</span></div>
+          <div class="sharpe">1.67<span>Dev Sharpe</span></div>
+        </div>
       </a>
     </div>
   </section>
@@ -662,7 +702,6 @@ document.getElementById("themeBtn").addEventListener("click", () => {
 });
 
 let charts = null;
-let london = null;
 
 function palette() {
   const s = getComputedStyle(root);
@@ -882,14 +921,6 @@ function draw() {
   histogram(document.getElementById("sakBoot"), sak.boot, sak.boot_actual);
   histogram(document.getElementById("sakTime"), sak.timing, sak.timing_actual);
   bars(document.getElementById("sakSlip"), ["1 tick", "2 ticks", "3 ticks"], sak.slip, null);
-  const lon = charts.london;
-  const lonCut = lon.dates.findIndex((d) => d >= lon.split);
-  equity(document.getElementById("lonEq"), lon.dates, lon.equity, lonCut < 0 ? 0 : lonCut, true);
-  if (!london || !london.matched) return;
-  histogram(document.getElementById("lonPerm"), london.perm, london.perm_actual);
-  histogram(document.getElementById("lonBoot"), london.boot, london.boot_actual);
-  histogram(document.getElementById("lonTime"), london.timing, london.timing_actual);
-  bars(document.getElementById("lonSlip"), ["1 tick", "2 ticks", "3 ticks"], london.slip, null);
 }
 
 const pieces = {
@@ -1062,7 +1093,7 @@ function renderPiece(p) {
 
 function route() {
   const hash = location.hash;
-  const caseId = hash === "#gotobi" || hash === "#london-fix" ? hash : "";
+  const caseId = ["#gotobi", "#hedge-band", "#unwind", "#auction"].includes(hash) ? hash : "";
   const piece = pieces[hash.slice(1)];
   const page = hash === "#competitions" ? "competitions" : (hash === "#mosaic" || caseId ? "mosaic" : (piece ? "read" : "home"));
   home.hidden = page !== "home";
@@ -1094,12 +1125,8 @@ function route() {
 window.addEventListener("hashchange", route);
 window.addEventListener("resize", draw);
 route();
-Promise.all([
-  fetch("data/charts.json").then((r) => r.json()),
-  fetch("data/london_fix.json").then((r) => (r.ok ? r.json() : null)).catch(() => null),
-]).then(([c, a]) => {
+fetch("data/charts.json").then((r) => r.json()).then((c) => {
   charts = c;
-  london = a;
   draw();
 });
 if (document.fonts) document.fonts.ready.then(draw);
