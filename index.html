@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benjamin Li</title>
+<meta name="description" content="Benjamin Li is an MEng Robotics and Artificial Intelligence student at UCL, working on trading research and machine learning.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: light;
+  --page: #f7f6f2;
+  --surface: #fcfcfb;
+  --surface-2: #efeee8;
+  --ink: #111110;
+  --ink-2: #4d4c48;
+  --muted: #76746d;
+  --line: rgba(17,17,16,0.12);
+  --good: #0ca30c;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #111110;
+    --surface: #1a1a19;
+    --surface-2: #232321;
+    --ink: #f0efec;
+    --ink-2: #c3c2b7;
+    --muted: #96948b;
+    --line: rgba(255,255,255,0.12);
+    --good: #3fbf3f;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #111110;
+  --surface: #1a1a19;
+  --surface-2: #232321;
+  --ink: #f0efec;
+  --ink-2: #c3c2b7;
+  --muted: #96948b;
+  --line: rgba(255,255,255,0.12);
+  --good: #3fbf3f;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font: 16px/1.6 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+a { color: inherit; }
+header.top {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--page) 88%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.bar {
+  max-width: 1080px; margin: 0 auto; padding: 18px 24px;
+  display: flex; align-items: center; gap: 28px;
+}
+.brand {
+  font-weight: 600; letter-spacing: .18em; font-size: 13px; text-decoration: none;
+}
+nav { display: flex; gap: 22px; flex: 1; }
+nav a {
+  color: var(--muted); text-decoration: none; font-size: 14px;
+  padding: 2px 0; border-bottom: 1px solid transparent;
+}
+nav a:hover, a.aside:hover { color: var(--ink); }
+nav a[aria-current="page"], a.aside[aria-current="page"] { color: var(--ink); border-bottom-color: var(--ink); }
+a.aside {
+  margin-left: auto; color: var(--muted); text-decoration: none; font-size: 14px;
+  padding: 2px 0; border-bottom: 1px solid transparent;
+}
+button.theme {
+  border: 1px solid var(--line); background: transparent; color: var(--ink-2);
+  width: 32px; height: 32px; border-radius: 50%; font: inherit; font-size: 14px;
+  cursor: pointer; display: grid; place-items: center;
+}
+button.theme:hover { color: var(--ink); }
+main { max-width: 1080px; margin: 0 auto; padding: 0 24px 80px; }
+section { scroll-margin-top: 84px; }
+.hero { padding: 72px 0 28px; }
+.eyebrow {
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 18px;
+}
+h1 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-weight: 400; font-size: clamp(52px, 8vw, 92px);
+  line-height: 0.96; letter-spacing: -0.02em; margin: 0 0 22px;
+}
+h1 em { font-style: italic; color: var(--ink-2); }
+h2 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-weight: 400; font-size: clamp(32px, 4vw, 44px);
+  line-height: 1.05; margin: 0;
+}
+.lede { font-size: clamp(18px, 2vw, 21px); line-height: 1.5; color: var(--ink-2); max-width: 38em; margin: 0; }
+.meta {
+  display: flex; flex-wrap: wrap; gap: 10px 22px;
+  margin: 28px 0 0; padding-top: 22px; border-top: 1px solid var(--line);
+  color: var(--muted); font-size: 14px;
+}
+.block { padding: 64px 0 0; }
+.block-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+.item {
+  display: grid; grid-template-columns: 210px 1fr; gap: 28px;
+  padding: 28px 0; border-top: 1px solid var(--line);
+}
+.when { color: var(--muted); font-size: 14px; padding-top: 4px; }
+.item h3 { font-size: 18px; font-weight: 600; margin: 0 0 4px; }
+.where { color: var(--ink-2); margin: 0 0 12px; font-size: 15px; }
+.item p { margin: 0 0 10px; color: var(--ink-2); max-width: 68ch; }
+.item p:last-child { margin-bottom: 0; }
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+article.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+  padding: 24px 24px 22px; display: flex; flex-direction: column; min-height: 220px;
+}
+article.card .when { padding-top: 0; margin-bottom: 14px; }
+article.card h3 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-weight: 400; font-size: 28px; line-height: 1.1; margin: 0 0 10px;
+}
+article.card p { margin: 0; color: var(--ink-2); font-size: 15px; }
+article.card .foot { margin-top: auto; padding-top: 18px; color: var(--muted); font-size: 13px; }
+.wide { grid-column: 1 / -1; }
+.study { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+.study article {
+  border-top: 1px solid var(--ink); padding-top: 16px;
+}
+.study h3 { font-size: 18px; margin: 0 0 6px; }
+.study p { margin: 0; color: var(--ink-2); font-size: 15px; }
+.study .when { display: block; margin-bottom: 8px; }
+.skills { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 18px; }
+.skills div { border-top: 1px solid var(--line); padding-top: 14px; }
+.skills h3 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin: 0 0 8px; }
+.skills p { margin: 0; color: var(--ink-2); }
+footer { border-top: 1px solid var(--line); margin-top: 72px; }
+footer .in {
+  max-width: 1080px; margin: 0 auto; padding: 22px 24px 32px;
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  font-size: 14px;
+}
+footer a { color: var(--ink-2); text-decoration: none; }
+footer a:hover { color: var(--ink); }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); margin: 22px 0 0; }
+.stats > div { padding: 18px 18px 4px 0; }
+.stats > div + div { padding-left: 18px; border-left: 1px solid var(--line); }
+.stats .v { font-family: "Instrument Serif", Georgia, serif; font-size: clamp(32px, 4vw, 46px); line-height: 1; font-variant-numeric: tabular-nums; }
+.stats .k { font-size: 13px; color: var(--muted); margin-top: 8px; }
+.years { display: grid; grid-template-columns: repeat(9, 1fr); gap: 8px; margin: 18px 0 0; }
+.years div { border-top: 1px solid var(--line); padding-top: 8px; }
+.years b { display: block; font-weight: 500; font-variant-numeric: tabular-nums; }
+.years span { color: var(--muted); font-size: 12px; }
+.pods { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 16px; }
+.pods article { border-top: 1px solid var(--ink); padding-top: 12px; }
+.pods h3 { font-size: 15px; margin: 0 0 6px; }
+.pods p { margin: 0; color: var(--ink-2); font-size: 14px; }
+.case { margin-top: 36px; }
+.case h3 { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 32px; line-height: 1.1; margin: 0 0 10px; }
+.mech { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 16px 0; }
+.mech div { padding: 14px 16px 14px 0; font-size: 14px; color: var(--ink-2); }
+.mech div + div { padding-left: 16px; border-left: 1px solid var(--line); }
+.mech b { display: block; font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 9px 14px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 500; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+td.n, th.n { text-align: right; }
+.note { font-size: 13px; color: var(--muted); margin: 14px 0 0; max-width: 72ch; }
+td .note { display: block; margin: 4px 0 0; }
+h1.section { font-size: clamp(44px, 6vw, 72px); }
+ol.gate { list-style: none; margin: 8px 0 0; padding: 0; counter-reset: gate; }
+ol.gate li {
+  counter-increment: gate;
+  display: grid; grid-template-columns: 52px 1fr; gap: 8px 16px;
+  padding: 18px 0; border-top: 1px solid var(--line);
+}
+ol.gate li::before {
+  content: counter(gate, decimal-leading-zero);
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: 26px; color: var(--muted); line-height: 1.1;
+}
+ol.gate h3 { font-size: 16px; font-weight: 600; margin: 0 0 4px; }
+ol.gate p { margin: 0; color: var(--ink-2); max-width: 68ch; }
+.plots { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 22px; margin-top: 22px; }
+.plots .wide { grid-column: 1 / -1; }
+figure.chart { margin: 0; }
+figure.chart h3 { font-size: 15px; font-weight: 600; margin: 0 0 8px; font-family: Inter, system-ui, sans-serif; }
+canvas.plot { width: 100%; height: 250px; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+.swatch { width: 18px; height: 3px; display: inline-block; margin-right: 6px; vertical-align: middle; }
+.swatch.is { background: var(--ink); }
+.swatch.oos { background: var(--good); }
+.swatch.null { background: var(--muted); }
+.mast { display: flex; align-items: center; gap: 22px; margin-bottom: 20px; }
+.mast .eyebrow { margin-bottom: 8px; }
+.mast h1 { margin: 0; }
+.mark { width: 104px; height: 104px; flex: none; display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .mark { filter: invert(1); }
+}
+:root[data-theme="dark"] .mark { filter: invert(1); }
+@media (max-width: 800px) {
+  .item, .cards, .study, .skills, .stats, .pods, .mech { grid-template-columns: 1fr 1fr; }
+  .plots, .plots .wide { grid-template-columns: 1fr; grid-column: auto; }
+  .years { grid-template-columns: repeat(3, 1fr); }
+  .stats > div + div { border-left: 0; padding-left: 0; }
+  .stats > div:nth-child(odd) { padding-right: 12px; }
+  .mech div + div, .pods article { border-left: 0; padding-left: 0; }
+  .wide { grid-column: auto; }
+  .bar { padding: 14px 16px; gap: 16px; }
+  nav { gap: 14px; }
+  main { padding: 0 16px 56px; }
+  .hero { padding: 44px 0 20px; }
+  footer .in { padding: 20px 16px 28px; }
+}
+@media (max-width: 640px) {
+  .bar { flex-wrap: wrap; row-gap: 8px; }
+  .brand { white-space: nowrap; }
+  a.aside { order: 2; }
+  button.theme { order: 2; }
+  nav { flex-basis: 100%; order: 3; }
+  .hero { padding-top: 132px; }
+  .mark { width: 72px; height: 72px; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="bar">
+    <a class="brand" href="#top">BENJAMIN LI</a>
+    <nav>
+      <a href="#work">Work</a>
+      <a href="#competitions">Competitions</a>
+      <a href="#projects">Projects</a>
+      <a href="#study">Study</a>
+    </nav>
+    <a class="aside" href="#mosaic">Mosaic</a>
+    <button class="theme" id="themeBtn" type="button" aria-label="Switch colour theme">◐</button>
+  </div>
+</header>
+<main id="competitions" hidden>
+  <section class="hero">
+    <p class="eyebrow">Competitions</p>
+    <h1 class="section">Two hackathons</h1>
+    <p class="lede">The AI Chessathon, and Cambridge Battlecode.</p>
+  </section>
+  <section class="block">
+    <article class="item">
+      <div class="when">Sep 2026<br>London</div>
+      <div>
+        <h3>AI Chessathon</h3>
+        <p class="where">Optiver</p>
+        <p>Top 16 of 465 teams, through to the London final. A Numba chess engine with alpha-beta Negamax and a quantised HalfKP NNUE, fine-tuned with DAgger self-play.</p>
+      </div>
+    </article>
+    <article class="item">
+      <div class="when">Nov 2026<br>Cambridge</div>
+      <div>
+        <h3>Cambridge Battlecode</h3>
+        <p class="where">Won · final on 18 November</p>
+        <p>A bot written in Rust and compiled to WebAssembly. The qualifiers on 4 and 11 November, and the final, were played on maps the bot had not seen.</p>
+      </div>
+    </article>
+  </section>
+</main>
+<main id="mosaic" hidden>
+  <section class="hero">
+    <div class="mast">
+      <img class="mark" src="logo.png" alt="">
+      <div>
+        <p class="eyebrow">Mosaic Alpha Research</p>
+        <h1 class="section">The book, and the gate it has to clear</h1>
+      </div>
+    </div>
+    <p class="lede">A futures book of pre-registered rules. Each strategy trades one contract on $100,000, with one tick of slippage per fill and $0.95 commission per round trip. Nothing is added because a chart looked good. It has to pass the gate below, on data sealed at the end of 2022, and then a single holdout from 2023.</p>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>The book</h2></div>
+    <p class="lede">Five pods share $500,000 equally, and inside a pod the strategies are equal weight. Figures are as of 21 November 2026.</p>
+    <div class="stats">
+      <div><div class="v">2.10</div><div class="k">Sharpe, 2018 to 18 Jun 2026</div></div>
+      <div><div class="v">10.7%</div><div class="k">CAGR on $500,000</div></div>
+      <div><div class="v">$1.18m</div><div class="k">Ending equity, $1,183,160</div></div>
+      <div><div class="v">76</div><div class="k">Strategies across five pods</div></div>
+    </div>
+    <div class="years" aria-label="Calendar-year returns">
+      <div><b>10.4%</b><span>2018</span></div>
+      <div><b>4.6%</b><span>2019</span></div>
+      <div><b>7.7%</b><span>2020</span></div>
+      <div><b>11.3%</b><span>2021</span></div>
+      <div><b>18.9%</b><span>2022</span></div>
+      <div><b>5.4%</b><span>2023</span></div>
+      <div><b>16.1%</b><span>2024</span></div>
+      <div><b>10.8%</b><span>2025</span></div>
+      <div><b>6.0%</b><span>2026 to 18 Jun</span></div>
+    </div>
+    <div class="plots">
+      <figure class="chart wide">
+        <h3>Weekly equity, in sample and holdout</h3>
+        <canvas class="plot" id="bookEq" aria-label="Weekly equity of the book, split at 2023"></canvas>
+        <p class="legend"><span><i class="swatch is"></i>In sample, through 2022</span><span><i class="swatch oos"></i>Holdout, from 2023</span></p>
+        <figcaption class="note">Weekly equity, 5 January 2018 to 19 June 2026, ending at $1,183,160. The colour changes on the first week of 2023. Through 2022 the book’s Sharpe was 2.05 and its CAGR 10.5%. From 2023 through 18 June 2026, Sharpe 2.16 and CAGR 11.1%. Every calendar year in the window finished higher.</figcaption>
+      </figure>
+    </div>
+    <div class="pods">
+      <article><h3>Pod 1</h3><p>6 strategies · BTC, ES, NQ<br>Sharpe 1.65 · CAGR 27.4%</p></article>
+      <article><h3>Pod 2</h3><p>10 strategies · BTC, ES, GC, NQ<br>Sharpe 1.99 · CAGR 15.2%</p></article>
+      <article><h3>Pod 3</h3><p>9 strategies · BTC, GC, NQ, YM<br>Sharpe 1.69 · CAGR 9.1%</p></article>
+      <article><h3>Pod 4</h3><p>35 strategies · five markets<br>Sharpe 1.42 · CAGR 1.1%</p></article>
+      <article><h3>Pod 5</h3><p>16 strategies · BTC, GC, NQ<br>Sharpe 1.50 · CAGR 1.8%</p></article>
+    </div>
+    <p class="note">From 16 to 20 November 2026 the paper book closed 126 trades across 50 strategies for $34,855.90, with 58.7% of those trades winners. No order is sent.</p>
+  </section>
+
+  <section class="block" id="gate">
+    <div class="block-head"><h2>What has to be true first</h2></div>
+    <p class="lede">The code is frozen before any of this runs. The checks use data through 31 December 2022, cheapest first, and stop at the first miss. The holdout is opened once, at the end. A rule is not edited after that look.</p>
+    <ol class="gate">
+      <li>
+        <div>
+          <h3>Development P&amp;L</h3>
+          <p>Net of the tick and the commission, over the development window, and still positive after removing any P&amp;L that came only from holding a position across a contract roll.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Novelty</h3>
+          <p>Daily-return correlation under 0.95 against the book and against earlier passes from other families. A port of the same rule to another symbol is exempt from that comparison.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Lookahead</h3>
+          <p>Future bars are corrupted, at the entry minute and at random cuts. The trades already taken must not change. The audit has to come back clean.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Parameter stress</h3>
+          <p>Each parameter is moved to 0.8× and to 1.2×, one at a time. Every variant has to stay net positive. A rule whose times are fixed by the mechanism, with nothing left to turn, skips this step.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Extra slippage</h3>
+          <p>The same trades, with one extra tick of slippage on every fill. Still net positive. A third tick is computed and kept as information. It is not a gate.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Monte Carlo</h3>
+          <p>The sign of each development trade is shuffled 2,000 times. The real P&amp;L has to beat that null at p &lt; 0.05. Separately, 2,000 bootstrap resamples of the same trades have to finish positive at least 95% of the time.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Random timing</h3>
+          <p>The same trades keep their side and their holding length and are moved onto 1,000 random sessions. The real timing has to beat that null at p &lt; 0.10. A rule that trades almost every session at one clock time is judged by a shuffle of the minute inside the session, because a session shuffle would leave the clock time in place.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Sealed holdout</h3>
+          <p>From 1 January 2023: Sharpe above zero, net P&amp;L above zero, and still above zero after the roll adjustment, with at least one trade. The development portion of that full run has to match the development run.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="block">
+    <article class="case" id="gotobi">
+      <p class="eyebrow">Case study · Sakuraba</p>
+      <h3>Gotobi dollar buying</h3>
+      <p>Japanese importers settle dollar invoices on gotobi dates, the 5th, 10th, 15th, 20th, 25th and 30th. Their banks buy dollars into the 09:55 JST Tokyo fix, so USD/JPY is pushed up into the fix. Sakuraba is the strategy on that flow, one yen future. The charts are the checks it cleared.</p>
+      <div class="mech">
+        <div><b>Actor</b>Japanese importers settling invoices</div>
+        <div><b>Forced trade</b>Banks buy dollars to cover them</div>
+        <div><b>Timing</b>Into the 09:55 JST Tokyo fix</div>
+        <div><b>Sign</b>USD/JPY up into the fix</div>
+      </div>
+      <div class="stats">
+        <div><div class="v">$54,657</div><div class="k">Dev net, 729 trades, 2010–2022</div></div>
+        <div><div class="v">$1,227</div><div class="k">Holdout net, 228 trades</div></div>
+        <div><div class="v">0.24</div><div class="k">Holdout Sharpe, 2023 to 13 Nov 2026</div></div>
+        <div><div class="v">Clean</div><div class="k">Lookahead. Roll P&amp;L $0</div></div>
+      </div>
+      <p class="note">Nets are after costs. Every parameter, taken to 0.8× and to 1.2×, stayed net positive. Measured 15 November 2026.</p>
+      <div class="plots">
+        <figure class="chart wide">
+          <h3>Sakuraba equity</h3>
+          <canvas class="plot" id="sakEq" aria-label="Sakuraba cumulative profit, in sample and holdout"></canvas>
+          <p class="legend"><span><i class="swatch is"></i>Development, 2010–2022</span><span><i class="swatch oos"></i>Holdout, from 2023</span></p>
+          <figcaption class="note">Cumulative net P&amp;L of one yen future, weekly. It ends at $55,885 on 13 November 2026, which is the development $54,657 plus the holdout $1,227.</figcaption>
+        </figure>
+        <figure class="chart">
+          <h3>Direction shuffle, 2,000 books</h3>
+          <canvas class="plot" id="sakPerm" aria-label="Histogram of shuffled trade directions against the real development profit"></canvas>
+          <figcaption class="note">Each bar is a book of the 729 development trades with the signs shuffled. The null tops out at $18,957. The real result, $54,657, is the green line. None of the 2,000 reached it.</figcaption>
+        </figure>
+        <figure class="chart">
+          <h3>Bootstrap of the same trades</h3>
+          <canvas class="plot" id="sakBoot" aria-label="Histogram of bootstrap resamples of Sakuraba development trades"></canvas>
+          <figcaption class="note">2,000 resamples. All 2,000 finished positive, against a bar of 95%. The 5th percentile is $41,181. The green line is the real $54,657.</figcaption>
+        </figure>
+        <figure class="chart">
+          <h3>Random sessions, 1,000 books</h3>
+          <canvas class="plot" id="sakTime" aria-label="Histogram of Sakuraba trades moved to random sessions"></canvas>
+          <figcaption class="note">Same trades, same side, same holding length, moved to random sessions. This test prices each trade from the open of the entry bar to the close of the exit bar, so its real P&amp;L is $52,232 rather than the fill P&amp;L above. The null tops out at $29,682. None of the 1,000 books beat it.</figcaption>
+        </figure>
+        <figure class="chart">
+          <h3>Slippage, per fill</h3>
+          <canvas class="plot" id="sakSlip" aria-label="Sakuraba net profit at one, two and three ticks of slippage"></canvas>
+          <figcaption class="note">The gate requires the second bar, one extra tick, to stay positive: $45,545. Two extra ticks, which is not a gate, still leaves $36,432. Breakeven is 7 ticks per fill.</figcaption>
+        </figure>
+      </div>
+    </article>
+
+    <article class="case" id="london-fix">
+      <p class="eyebrow">Case study</p>
+      <h3>Month-end London fix</h3>
+      <p>The 16:00 London fix is the customer reference rate. At month-end, pound buy-backs cluster there: a high fix lets banks fill those purchases at a high price, so GBP/USD is bought into the fix. One pound future sits on that flow. The charts are the checks it cleared.</p>
+      <div class="mech">
+        <div><b>Actor</b>Customers buying pounds back</div>
+        <div><b>Forced trade</b>Banks lift GBP/USD to fill them</div>
+        <div><b>Timing</b>Into the month-end 16:00 London fix</div>
+        <div><b>Sign</b>GBP/USD up into the fix</div>
+      </div>
+      <div class="stats">
+        <div><div class="v">$7,985</div><div class="k">Dev net, 147 trades, 12.5 years</div></div>
+        <div><div class="v">0.79</div><div class="k">Dev Sharpe</div></div>
+        <div><div class="v">$1,520</div><div class="k">Holdout net, 45 trades</div></div>
+        <div><div class="v">0.67</div><div class="k">Holdout Sharpe, 2023 to 13 Nov 2026</div></div>
+      </div>
+      <p class="note">Lookahead clean, roll P&amp;L $0, and the closest daily-return correlation with another family was 0.15. Measured 15 November 2026.</p>
+      <div class="plots">
+        <figure class="chart wide">
+          <h3>Equity, marked to the session</h3>
+          <canvas class="plot" id="lonEq" aria-label="Month-end London fix cumulative profit, in sample and holdout"></canvas>
+          <p class="legend"><span><i class="swatch is"></i>In sample, from 2018</span><span><i class="swatch oos"></i>Holdout, from 2023</span></p>
+          <figcaption class="note">Cumulative P&amp;L from daily returns, 1 January 2018 to 13 November 2026. The series starts in 2018, so the grey part is the later years of a development window that begins in 2010. The $7,985 above is that full window. The green part is the holdout. Closed-trade holdout over the same dates is $1,520.</figcaption>
+        </figure>
+        <figure class="chart">
+          <h3>Direction shuffle, 2,000 books</h3>
+          <canvas class="plot" id="lonPerm" aria-label="Histogram of shuffled London-fix trade directions"></canvas>
+          <figcaption class="note">The 147 development trades, signs shuffled. The null tops out at $7,048. The real $7,985 is the green line. None of the 2,000 reached it.</figcaption>
+        </figure>
+        <figure class="chart">
+          <h3>Bootstrap of the same trades</h3>
+          <canvas class="plot" id="lonBoot" aria-label="Histogram of bootstrap resamples of the London-fix trades"></canvas>
+          <figcaption class="note">1,997 of the 2,000 resamples finished positive, 99.85%, against a bar of 95%. The green line is the real $7,985.</figcaption>
+        </figure>
+        <figure class="chart">
+          <h3>Random sessions, 1,000 books</h3>
+          <canvas class="plot" id="lonTime" aria-label="Histogram of London-fix trades moved to random sessions"></canvas>
+          <figcaption class="note">Moved to random sessions, side and holding length kept. On this test’s open-to-close prices the real timing made $6,523. The null tops out at $3,185. None of the 1,000 books beat it, so the p-value is 0.</figcaption>
+        </figure>
+        <figure class="chart">
+          <h3>Slippage, per fill</h3>
+          <canvas class="plot" id="lonSlip" aria-label="London-fix net profit at one, two and three ticks"></canvas>
+          <figcaption class="note">Base, one tick per fill: $7,985. One extra tick, the gate: $6,148. Two extra ticks, not a gate: $4,310.</figcaption>
+        </figure>
+      </div>
+    </article>
+  </section>
+</main>
+<main id="home">
+  <section class="hero" id="top">
+    <p class="eyebrow">London</p>
+    <h1>Benjamin <em>Li</em></h1>
+    <p class="lede">MEng Robotics &amp; Artificial Intelligence at University College London. I build trading research systems and machine-learning models, and I am writing a thesis on SLAM-inspired world models for financial markets.</p>
+    <p class="meta">
+      <span>UCL, 2023–2027</span>
+      <span>English and Mandarin</span>
+      <span><a href="mailto:benjamin.li.23@ucl.ac.uk">benjamin.li.23@ucl.ac.uk</a></span>
+    </p>
+  </section>
+
+  <section class="block" id="work">
+    <div class="block-head"><h2>Work</h2></div>
+
+    <article class="item">
+      <div class="when">Sep 2026 – present<br>Remote</div>
+      <div>
+        <h3>Quantitative research consultant</h3>
+        <p class="where">Prediction markets · Python</p>
+        <p>Advising a confidential client on whether systematic prediction-market trading is feasible: broker infrastructure, APIs, market structure, data, and what can actually be executed.</p>
+        <p>Built an execution-aware paper-trading engine with fees, one second of latency, a cap at half the displayed depth, and position limits. A simulated $10,000 book grew to multiple six figures. The current work is the move from that paper book toward live trading.</p>
+      </div>
+    </article>
+
+    <article class="item">
+      <div class="when">Mar 2025 – Oct 2025<br>Remote</div>
+      <div>
+        <h3>AI quantitative research intern</h3>
+        <p class="where">PredictNow.AI · Python</p>
+        <p>Built a PPO portfolio optimiser with behavioural-cloning pretraining and an HMM regime detector. On 2014–2025 it reached a Sharpe ratio of 0.98, against 0.69 for the S&amp;P 500.</p>
+        <p>Tested more than 30 model variations over ten weeks, with predictive features, unit tests, and lookahead checks. Presented the work to senior stakeholders and to clients including Bloomberg and Citi.</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="block" id="projects">
+    <div class="block-head"><h2>Projects</h2></div>
+    <div class="cards">
+      <article class="card wide">
+        <div class="when">Oct 2026 – present · UCL final-year project</div>
+        <h3>SLAM-inspired world models for markets</h3>
+        <p>Latent market maps in the style of simultaneous localisation and mapping: recover a historical state, name the regime, and forecast from there.</p>
+        <div class="foot">Python · London</div>
+      </article>
+      <article class="card">
+        <div class="when">Jun 2026 – present</div>
+        <h3>Mosaic Alpha Research</h3>
+        <p>A Python trading platform with a live broker connection, a monitoring dashboard, and Telegram alerts. Stress-tested 443 holdout-positive systematic strategies on out-of-sample data, Monte Carlo, costs, and parameter sensitivity, and kept 16. A PPO meta-labeller cut maximum drawdown by 30% and raised Sharpe by 13%. An MLP-HMM regime detector showed 3.5× the directional edge across more than a million observations.</p>
+        <div class="foot">Python · London</div>
+      </article>
+      <article class="card">
+        <div class="when">Sep 2026 · Optiver-sponsored hackathon</div>
+        <h3>Chess engine</h3>
+        <p>Top 16 of 465 teams, through to the London final. A Numba chess engine with alpha-beta Negamax and a quantised HalfKP NNUE, fine-tuned with DAgger self-play.</p>
+        <div class="foot">Python, PyTorch, Numba</div>
+      </article>
+      <article class="card">
+        <div class="when">May 2026 · UCL third-year group project</div>
+        <h3>Pedestrian trajectories</h3>
+        <p>Put conformal prediction into a deep-RL trajectory reward. The uncertainty-aware safety radius tightened by 0.6% on average while keeping 95% statistical coverage. A variance-based smoother cut minADE@20 by 6.7%.</p>
+        <div class="foot">Python</div>
+      </article>
+      <article class="card">
+        <div class="when">Mar 2026 · UCL deep learning</div>
+        <h3>CNN and language-model benchmark</h3>
+        <p>A PyTorch harness for CNNs and language models: fine-tuned GPT-2 and compared accuracy, inference latency, and energy.</p>
+        <div class="foot">Python, Hugging Face</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="study">
+    <div class="block-head"><h2>Study</h2></div>
+    <div class="study">
+      <article>
+        <span class="when">Sep 2023 – Jun 2027 · London</span>
+        <h3>University College London</h3>
+        <p>MEng Robotics &amp; Artificial Intelligence, predicted first. Machine learning, reinforcement learning, deep learning, data analysis, data structures, and modelling.</p>
+      </article>
+      <article>
+        <span class="when">Sep 2017 – Jun 2022 · Buckingham</span>
+        <h3>Stowe School</h3>
+        <p>Academic scholar and senior prefect. A-levels: Mathematics A*, Further Mathematics A*, Chemistry A*, Biology A.</p>
+      </article>
+    </div>
+    <div class="skills">
+      <div>
+        <h3>Research</h3>
+        <p>Reinforcement learning, algorithmic trading, imitation learning, time series, portfolio optimisation, regime detection, conformal prediction, prediction markets.</p>
+      </div>
+      <div>
+        <h3>Tools</h3>
+        <p>Python, NumPy, pandas, PyTorch, scikit-learn, Stable-Baselines3, Gymnasium, Ray, C, MATLAB, Git, Docker, LangChain, LangGraph.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="in">
+    <span>Benjamin Li</span>
+    <span>
+      <a href="mailto:benjamin.li.23@ucl.ac.uk">Email</a>
+      &nbsp;·&nbsp;
+      <a href="https://github.com/benbwli">GitHub</a>
+    </span>
+  </div>
+</footer>
+<script>
+const root = document.documentElement;
+const home = document.getElementById("home");
+const competitions = document.getElementById("competitions");
+const lab = document.getElementById("mosaic");
+try {
+  const saved = localStorage.getItem("site-theme");
+  if (saved) root.dataset.theme = saved;
+} catch (e) {}
+const dark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+document.getElementById("themeBtn").addEventListener("click", () => {
+  root.dataset.theme = dark() ? "light" : "dark";
+  try { localStorage.setItem("site-theme", root.dataset.theme); } catch (e) {}
+  draw();
+});
+
+let charts = null;
+let london = null;
+
+function palette() {
+  const s = getComputedStyle(root);
+  const v = (name) => s.getPropertyValue(name).trim();
+  return { ink: v("--ink"), muted: v("--muted"), line: v("--line"), good: v("--good"), ink2: v("--ink-2") };
+}
+function frame(canvas) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = canvas.clientWidth;
+  const h = canvas.clientHeight;
+  if (w < 20 || h < 20) return null;
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
+  const g = canvas.getContext("2d");
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.clearRect(0, 0, w, h);
+  return { g, w, h };
+}
+function money(n) {
+  const sign = n < 0 ? "−" : "";
+  const a = Math.abs(n);
+  if (a >= 1e6) return sign + "$" + (a / 1e6).toFixed(2) + "m";
+  if (a >= 10000) return sign + "$" + Math.round(a / 1000) + "k";
+  if (a >= 1000) return sign + "$" + (a / 1000).toFixed(1) + "k";
+  return sign + "$" + Math.round(a);
+}
+function exact(n) {
+  const sign = n < 0 ? "−" : "";
+  return sign + "$" + Math.round(Math.abs(n)).toLocaleString("en-US");
+}
+function xOf(i, n, pad, w) {
+  if (n <= 1) return pad.l;
+  return pad.l + (i / (n - 1)) * (w - pad.l - pad.r);
+}
+function yOf(v, min, max, pad, h) {
+  const span = max - min || 1;
+  return pad.t + (1 - (v - min) / span) * (h - pad.t - pad.b);
+}
+
+function equity(canvas, dates, values, split, step) {
+  const box = frame(canvas);
+  if (!box) return;
+  const { g, w, h } = box;
+  const c = palette();
+  const pad = { l: 62, r: 14, t: 16, b: 28 };
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || 1;
+  let lo = min - span * 0.08;
+  const hi = max + span * 0.08;
+  if (min >= 0 && lo < 0) lo = 0;
+  g.strokeStyle = c.line;
+  g.fillStyle = c.muted;
+  g.font = "11px Inter, system-ui, sans-serif";
+  g.textAlign = "right";
+  g.textBaseline = "middle";
+  for (let k = 0; k < 4; k++) {
+    const v = lo + (hi - lo) * (k / 3);
+    const y = yOf(v, lo, hi, pad, h);
+    g.beginPath();
+    g.moveTo(pad.l, y);
+    g.lineTo(w - pad.r, y);
+    g.stroke();
+    g.fillText(money(v), pad.l - 8, y);
+  }
+  const cut = Math.max(split, 0);
+  const sx = xOf(cut, dates.length, pad, w);
+  g.save();
+  g.setLineDash([3, 4]);
+  g.beginPath();
+  g.moveTo(sx, pad.t);
+  g.lineTo(sx, h - pad.b);
+  g.stroke();
+  g.restore();
+  g.textAlign = "left";
+  g.textBaseline = "top";
+  g.fillText("2023", Math.min(sx + 6, w - pad.r - 28), pad.t);
+  function stroke(from, to, color) {
+    g.beginPath();
+    g.strokeStyle = color;
+    g.lineWidth = 1.6;
+    g.lineJoin = "round";
+    for (let i = from; i <= to; i++) {
+      const x = xOf(i, dates.length, pad, w);
+      const y = yOf(values[i], lo, hi, pad, h);
+      if (i === from) g.moveTo(x, y);
+      else if (step) {
+        const xp = xOf(i - 1, dates.length, pad, w);
+        g.lineTo(x, yOf(values[i - 1], lo, hi, pad, h));
+        g.lineTo(x, y);
+      } else g.lineTo(x, y);
+    }
+    g.stroke();
+  }
+  stroke(0, cut, c.ink);
+  stroke(cut, dates.length - 1, c.good);
+  g.fillStyle = c.muted;
+  g.textAlign = "left";
+  g.textBaseline = "bottom";
+  g.fillText(dates[0].slice(0, 4), pad.l, h - 6);
+  g.textAlign = "right";
+  g.fillText(dates[dates.length - 1].slice(0, 7), w - pad.r, h - 6);
+}
+
+function histogram(canvas, spec, actual) {
+  const box = frame(canvas);
+  if (!box) return;
+  const { g, w, h } = box;
+  const c = palette();
+  const pad = { l: 36, r: 12, t: 22, b: 28 };
+  const edges = spec.edges;
+  const counts = spec.counts;
+  const xmin = Math.min(edges[0], actual);
+  const xmax = Math.max(edges[edges.length - 1], actual);
+  const span = (xmax - xmin) || 1;
+  const x0 = xmin - span * 0.04;
+  const x1 = xmax + span * 0.08;
+  const ymax = Math.max(...counts) * 1.18 || 1;
+  const X = (v) => pad.l + ((v - x0) / (x1 - x0)) * (w - pad.l - pad.r);
+  const Y = (v) => pad.t + (1 - v / ymax) * (h - pad.t - pad.b);
+  g.strokeStyle = c.line;
+  g.beginPath();
+  g.moveTo(pad.l, Y(0));
+  g.lineTo(w - pad.r, Y(0));
+  g.stroke();
+  g.fillStyle = c.muted;
+  for (let i = 0; i < counts.length; i++) {
+    const a = X(edges[i]) + 0.5;
+    const b = X(edges[i + 1]) - 0.5;
+    const y = Y(counts[i]);
+    g.fillRect(a, y, Math.max(b - a, 1), Y(0) - y);
+  }
+  if (x0 < 0 && x1 > 0) {
+    g.save();
+    g.setLineDash([2, 3]);
+    g.strokeStyle = c.line;
+    g.beginPath();
+    g.moveTo(X(0), pad.t);
+    g.lineTo(X(0), h - pad.b);
+    g.stroke();
+    g.restore();
+  }
+  const ax = X(actual);
+  g.strokeStyle = c.good;
+  g.lineWidth = 1.6;
+  g.beginPath();
+  g.moveTo(ax, pad.t);
+  g.lineTo(ax, h - pad.b);
+  g.stroke();
+  g.fillStyle = c.good;
+  g.font = "11px Inter, system-ui, sans-serif";
+  g.textBaseline = "bottom";
+  const label = exact(actual);
+  const tw = g.measureText(label).width;
+  g.textAlign = ax + 6 + tw > w - pad.r ? "right" : "left";
+  g.fillText(label, g.textAlign === "right" ? ax - 6 : ax + 6, pad.t - 2);
+  g.fillStyle = c.muted;
+  g.textBaseline = "bottom";
+  g.textAlign = "left";
+  g.fillText(money(edges[0]), pad.l, h - 6);
+  const endX = X(edges[edges.length - 1]);
+  g.textAlign = endX > w * 0.72 ? "right" : "left";
+  g.fillText(money(edges[edges.length - 1]), endX, h - 6);
+}
+
+function bars(canvas, labels, values, base) {
+  const box = frame(canvas);
+  if (!box) return;
+  const { g, w, h } = box;
+  const c = palette();
+  const pad = { l: 118, r: 16, t: 12, b: 22 };
+  const max = Math.max(...values, base || 0) * 1.08;
+  const n = values.length;
+  const row = (h - pad.t - pad.b) / n;
+  g.font = "11px Inter, system-ui, sans-serif";
+  g.textBaseline = "middle";
+  values.forEach((v, i) => {
+    const y = pad.t + row * i + row * 0.18;
+    const bh = row * 0.64;
+    const bw = ((w - pad.l - pad.r) * v) / max;
+    g.fillStyle = c.ink;
+    g.globalAlpha = 0.75;
+    g.fillRect(pad.l, y, bw, bh);
+    g.globalAlpha = 1;
+    g.fillStyle = c.muted;
+    g.textAlign = "right";
+    g.fillText(labels[i], pad.l - 8, y + bh / 2);
+  });
+  if (base) {
+    const x = pad.l + ((w - pad.l - pad.r) * base) / max;
+    g.save();
+    g.setLineDash([3, 3]);
+    g.strokeStyle = c.good;
+    g.beginPath();
+    g.moveTo(x, pad.t);
+    g.lineTo(x, h - pad.b);
+    g.stroke();
+    g.restore();
+  }
+  g.fillStyle = c.muted;
+  g.textAlign = "left";
+  g.textBaseline = "bottom";
+  g.fillText("$0", pad.l, h - 4);
+  g.textAlign = "right";
+  g.fillText(money(max / 1.08), w - pad.r, h - 4);
+}
+
+function draw() {
+  if (!charts || lab.hidden) return;
+  const book = charts.book;
+  const bookCut = book.dates.findIndex((d) => d >= book.split);
+  equity(document.getElementById("bookEq"), book.dates, book.equity, bookCut, false);
+  const sak = charts.sakuraba;
+  const sakCut = sak.segment.findIndex((s) => s !== "dev");
+  equity(document.getElementById("sakEq"), sak.dates, sak.equity, sakCut, false);
+  histogram(document.getElementById("sakPerm"), sak.perm, sak.perm_actual);
+  histogram(document.getElementById("sakBoot"), sak.boot, sak.boot_actual);
+  histogram(document.getElementById("sakTime"), sak.timing, sak.timing_actual);
+  bars(document.getElementById("sakSlip"), ["1 tick", "2 ticks", "3 ticks"], sak.slip, null);
+  const lon = charts.london;
+  const lonCut = lon.dates.findIndex((d) => d >= lon.split);
+  equity(document.getElementById("lonEq"), lon.dates, lon.equity, lonCut < 0 ? 0 : lonCut, true);
+  if (!london || !london.matched) return;
+  histogram(document.getElementById("lonPerm"), london.perm, london.perm_actual);
+  histogram(document.getElementById("lonBoot"), london.boot, london.boot_actual);
+  histogram(document.getElementById("lonTime"), london.timing, london.timing_actual);
+  bars(document.getElementById("lonSlip"), ["1 tick", "2 ticks", "3 ticks"], london.slip, null);
+}
+
+function route() {
+  const page = location.hash === "#competitions" || location.hash === "#mosaic" ? location.hash.slice(1) : "home";
+  home.hidden = page !== "home";
+  competitions.hidden = page !== "competitions";
+  lab.hidden = page !== "mosaic";
+  document.querySelectorAll("nav a, a.aside").forEach((a) => {
+    if (a.getAttribute("href") === location.hash) a.setAttribute("aria-current", "page");
+    else a.removeAttribute("aria-current");
+  });
+  if (page !== "home") {
+    window.scrollTo(0, 0);
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      if (page === "mosaic") requestAnimationFrame(draw);
+    });
+  }
+}
+window.addEventListener("hashchange", route);
+window.addEventListener("resize", draw);
+route();
+Promise.all([
+  fetch("data/charts.json").then((r) => r.json()),
+  fetch("data/london_fix.json").then((r) => (r.ok ? r.json() : null)).catch(() => null),
+]).then(([c, a]) => {
+  charts = c;
+  london = a;
+  draw();
+});
+if (document.fonts) document.fonts.ready.then(draw);
+</script>
+</body>
+</html>
