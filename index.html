@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Benjamin Li</title>
-<meta name="description" content="Benjamin Li is a quantitative researcher who builds robust systematic trading systems. MEng Robotics and Artificial Intelligence at UCL.">
+<meta name="description" content="Benjamin Li is a quantitative researcher working on deep reinforcement learning for systematic trading. MEng Robotics and Artificial Intelligence at UCL.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -103,7 +103,17 @@ h2 {
   font-weight: 400; font-size: clamp(32px, 4vw, 44px);
   line-height: 1.05; margin: 0;
 }
-.lede { font-size: clamp(18px, 2vw, 21px); line-height: 1.5; color: var(--ink-2); max-width: 38em; margin: 0; }
+.lede { font-size: clamp(18px, 2vw, 21px); line-height: 1.5; color: var(--ink-2); max-width: 40em; margin: 0; }
+.lede + .lede { margin-top: 16px; }
+a.item, a.card, .study a { text-decoration: none; color: inherit; }
+a.item:hover h3, a.card:hover h3, .study a:hover h3 { text-decoration: underline; text-underline-offset: 3px; }
+#read .block { padding-top: 8px; }
+.prose { max-width: 68ch; }
+.prose p { margin: 0 0 16px; color: var(--ink-2); font-size: 17px; line-height: 1.65; }
+.prose h2 { font-size: 28px; margin: 28px 0 12px; }
+.prose ul { margin: 0 0 16px; padding-left: 1.15em; color: var(--ink-2); }
+.prose li { margin: 0 0 8px; line-height: 1.55; }
+.prose a, .meta a { color: var(--ink); }
 .meta {
   display: flex; flex-wrap: wrap; gap: 10px 22px;
   margin: 28px 0 0; padding-top: 22px; border-top: 1px solid var(--line);
@@ -145,8 +155,8 @@ a.case-link .sharpe span {
 }
 .wide { grid-column: 1 / -1; }
 .study { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
-.study article {
-  border-top: 1px solid var(--ink); padding-top: 16px;
+.study article, .study a {
+  border-top: 1px solid var(--ink); padding-top: 16px; display: block;
 }
 .study h3 { font-size: 18px; margin: 0 0 6px; }
 .study p { margin: 0; color: var(--ink-2); font-size: 15px; }
@@ -268,22 +278,22 @@ canvas.plot { width: 100%; height: 250px; display: block; }
     <p class="lede">The AI Chessathon, and Cambridge Battlecode.</p>
   </section>
   <section class="block">
-    <article class="item">
+    <a class="item" href="#chess">
       <div class="when">Sep 2026<br>London</div>
       <div>
         <h3>AI Chessathon</h3>
         <p class="where">Optiver</p>
         <p>Top 16 of 465 teams, through to the London final. A Numba chess engine with alpha-beta Negamax and a quantised HalfKP NNUE, fine-tuned with DAgger self-play.</p>
       </div>
-    </article>
-    <article class="item">
+    </a>
+    <a class="item" href="#battlecode">
       <div class="when">Nov 2026<br>Cambridge</div>
       <div>
         <h3>Cambridge Battlecode</h3>
-        <p class="where">Won · final on 18 November</p>
-        <p>A bot written in Rust and compiled to WebAssembly. The qualifiers on 4 and 11 November, and the final, were played on maps the bot had not seen.</p>
+        <p class="where">3rd of 195 in the UK · 9th of 831 overall</p>
+        <p>Qualified for the finals. A fuel-bounded C++ bot, compiled to WebAssembly, combining beam-search farming with imitation learning.</p>
       </div>
-    </article>
+    </a>
   </section>
 </main>
 <main id="mosaic" hidden>
@@ -295,7 +305,8 @@ canvas.plot { width: 100%; height: 250px; display: block; }
         <h1 class="section">The book, and the gate it has to clear</h1>
       </div>
     </div>
-    <p class="lede">A futures book of pre-registered rules. Each strategy trades one contract on $100,000, with one tick of slippage per fill and $0.95 commission per round trip. Nothing is added because a chart looked good. It has to pass the gate below, on data sealed at the end of 2022, and then a single holdout from 2023.</p>
+    <p class="lede">Mosaic Alpha Research is a futures book, and the platform that runs it. I look for a forced flow, someone who has to trade at a known time, and I write the rule down before any test. Each strategy trades one contract on $100,000, with one tick of slippage per fill and $0.95 of commission per round trip. Development data ends on 31 December 2022. A strategy joins a pod only after the gate below, and the holdout from 2023 is opened once.</p>
+    <p class="lede">The platform has a broker connection, a monitoring dashboard, and Telegram alerts. The book further down is paper. Alongside it, a PPO meta-labeller cut maximum drawdown by about 30% and raised Sharpe by about 13%, and an MLP-HMM regime detector showed 3.5× the directional edge across more than a million observations.</p>
   </section>
 
   <section class="block">
@@ -491,11 +502,13 @@ canvas.plot { width: 100%; height: 250px; display: block; }
   <section class="hero" id="top">
     <p class="eyebrow">Quantitative research · London</p>
     <h1>Benjamin <em>Li</em></h1>
-    <p class="lede">I build robust trading systems. A rule is written down before it is tested, every fill pays the tick and the commission, and nothing joins the book until it has cleared a sealed holdout. The machinery around that — data, costs, and the gate — is the work.</p>
+    <p class="lede">I work on AI for systematic trading. The research is deep reinforcement learning for building portfolios and for deciding which signals to take, and the standard around it: no lookahead, costs on every fill, and a result that still holds on data it was not fit on.</p>
+    <p class="lede">Mosaic Alpha Research is the futures book I built for that standard. A rule is written down before it is tested. It pays one tick of slippage and $0.95 of commission. It joins a pod only after a fixed gate, and the holdout from 2023 is opened once.</p>
     <p class="meta">
       <span>UCL, MEng Robotics &amp; Artificial Intelligence, 2023–2027</span>
       <span>English and Mandarin</span>
       <span><a href="mailto:benjamin.li.23@ucl.ac.uk">benjamin.li.23@ucl.ac.uk</a></span>
+      <span><a href="https://www.linkedin.com/in/benjaminbiweili">LinkedIn</a></span>
     </p>
   </section>
 
@@ -521,7 +534,7 @@ canvas.plot { width: 100%; height: 250px; display: block; }
   <section class="block" id="work">
     <div class="block-head"><h2>Work</h2></div>
 
-    <article class="item">
+    <a class="item" href="#markets">
       <div class="when">Sep 2026 – present<br>Remote</div>
       <div>
         <h3>Quantitative research consultant</h3>
@@ -529,68 +542,73 @@ canvas.plot { width: 100%; height: 250px; display: block; }
         <p>Advising a confidential client on whether systematic prediction-market trading is feasible: broker infrastructure, APIs, market structure, data, and what can actually be executed.</p>
         <p>Built an execution-aware paper-trading engine with fees, one second of latency, a cap at half the displayed depth, and position limits. A simulated $10,000 book grew to multiple six figures. The current work is the move from that paper book toward live trading.</p>
       </div>
-    </article>
+    </a>
 
-    <article class="item">
+    <a class="item" href="#predictnow">
       <div class="when">Mar 2025 – Oct 2025<br>Remote</div>
       <div>
         <h3>AI quantitative research intern</h3>
         <p class="where">PredictNow.AI · Python</p>
-        <p>Built a PPO portfolio optimiser with behavioural-cloning pretraining and an HMM regime detector. On 2014–2025 it reached a Sharpe ratio of 0.98, against 0.69 for the S&amp;P 500.</p>
-        <p>Tested more than 30 model variations over ten weeks, with predictive features, unit tests, and lookahead checks. Presented the work to senior stakeholders and to clients including Bloomberg and Citi.</p>
+        <p>With Ernest Chan, a PPO portfolio optimiser pre-trained by imitation learning. On its own it reached a Sharpe of 0.8 against 0.69 for the S&amp;P 500. Paired with a hidden Markov regime model, the Sharpe was about 0.98. The window is 2014 to mid-2025.</p>
       </div>
-    </article>
+    </a>
   </section>
 
   <section class="block" id="projects">
     <div class="block-head"><h2>Projects</h2></div>
     <div class="cards">
-      <article class="card wide">
+      <a class="card wide" href="#thesis">
         <div class="when">Oct 2026 – present · UCL final-year project</div>
-        <h3>SLAM-inspired world models for markets</h3>
-        <p>Latent market maps in the style of simultaneous localisation and mapping: recover a historical state, name the regime, and forecast from there.</p>
+        <h3>World models for financial markets</h3>
+        <p>Latent market representations and historical state retrieval, for naming a regime and for a better representation of the feature set.</p>
         <div class="foot">Python · London</div>
-      </article>
-      <article class="card">
+      </a>
+      <a class="card" href="#mosaic">
         <div class="when">Jun 2026 – present</div>
         <h3>Mosaic Alpha Research</h3>
-        <p>A Python trading platform with a live broker connection, a monitoring dashboard, and Telegram alerts. Stress-tested 443 holdout-positive systematic strategies on out-of-sample data, Monte Carlo, costs, and parameter sensitivity, and kept 16. A PPO meta-labeller cut maximum drawdown by 30% and raised Sharpe by 13%. An MLP-HMM regime detector showed 3.5× the directional edge across more than a million observations.</p>
-        <div class="foot">Python · London</div>
-      </article>
-      <article class="card">
-        <div class="when">Sep 2026 · Optiver-sponsored hackathon</div>
+        <p>A futures book of pre-registered rules, and the platform around it. A strategy pays its costs, then has to clear a fixed gate and one sealed holdout before it joins a pod.</p>
+        <div class="foot">The book and the gate</div>
+      </a>
+      <a class="card" href="#metalabel">
+        <div class="when">Oct 2026</div>
+        <h3>PPO meta-labeller</h3>
+        <p>A reinforcement-learning filter on a tail-risk strategy. It decides whether to take each signal. Maximum drawdown fell by about 30%, and Sharpe rose by about 13%.</p>
+        <div class="foot">LinkedIn write-up</div>
+      </a>
+      <a class="card" href="#chess">
+        <div class="when">Sep 2026 · Optiver</div>
         <h3>Chess engine</h3>
         <p>Top 16 of 465 teams, through to the London final. A Numba chess engine with alpha-beta Negamax and a quantised HalfKP NNUE, fine-tuned with DAgger self-play.</p>
-        <div class="foot">Python, PyTorch, Numba</div>
-      </article>
-      <article class="card">
+        <div class="foot">Python, PyTorch, Numba · GitHub</div>
+      </a>
+      <a class="card" href="#pedestrian">
         <div class="when">May 2026 · UCL third-year group project</div>
         <h3>Pedestrian trajectories</h3>
-        <p>Put conformal prediction into a deep-RL trajectory reward. The uncertainty-aware safety radius tightened by 0.6% on average while keeping 95% statistical coverage. A variance-based smoother cut minADE@20 by 6.7%.</p>
-        <div class="foot">Python</div>
-      </article>
-      <article class="card">
+        <p>Conformal prediction inside a deep-RL trajectory reward. The safety radius tightened by 0.6% on average at 95% coverage. A variance smoother cut minADE@20 by 6.7%.</p>
+        <div class="foot">Python · GitHub</div>
+      </a>
+      <a class="card" href="#benchmark">
         <div class="when">Mar 2026 · UCL deep learning</div>
         <h3>CNN and language-model benchmark</h3>
         <p>A PyTorch harness for CNNs and language models: fine-tuned GPT-2 and compared accuracy, inference latency, and energy.</p>
         <div class="foot">Python, Hugging Face</div>
-      </article>
+      </a>
     </div>
   </section>
 
   <section class="block" id="study">
     <div class="block-head"><h2>Study</h2></div>
     <div class="study">
-      <article>
+      <a href="#ucl">
         <span class="when">Sep 2023 – Jun 2027 · London</span>
         <h3>University College London</h3>
         <p>MEng Robotics &amp; Artificial Intelligence, predicted first. Machine learning, reinforcement learning, deep learning, data analysis, data structures, and modelling.</p>
-      </article>
-      <article>
+      </a>
+      <a href="#stowe">
         <span class="when">Sep 2017 – Jun 2022 · Buckingham</span>
         <h3>Stowe School</h3>
         <p>Academic scholar and senior prefect. A-levels: Mathematics A*, Further Mathematics A*, Chemistry A*, Biology A.</p>
-      </article>
+      </a>
     </div>
     <div class="skills">
       <div>
@@ -604,11 +622,23 @@ canvas.plot { width: 100%; height: 250px; display: block; }
     </div>
   </section>
 </main>
+<main id="read" hidden>
+  <section class="hero">
+    <p class="eyebrow"><a id="readBack" href="#top">Back</a></p>
+    <p class="eyebrow" id="readKicker"></p>
+    <h1 class="section" id="readTitle"></h1>
+    <p class="lede" id="readLede"></p>
+    <p class="meta" id="readLinks"></p>
+  </section>
+  <section class="block prose" id="readBody"></section>
+</main>
 <footer>
   <div class="in">
     <span>Benjamin Li</span>
     <span>
       <a href="mailto:benjamin.li.23@ucl.ac.uk">Email</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/benjaminbiweili">LinkedIn</a>
       &nbsp;·&nbsp;
       <a href="https://github.com/benbwli">GitHub</a>
     </span>
@@ -619,6 +649,7 @@ const root = document.documentElement;
 const home = document.getElementById("home");
 const competitions = document.getElementById("competitions");
 const lab = document.getElementById("mosaic");
+const read = document.getElementById("read");
 try {
   const saved = localStorage.getItem("site-theme");
   if (saved) root.dataset.theme = saved;
@@ -861,16 +892,188 @@ function draw() {
   bars(document.getElementById("lonSlip"), ["1 tick", "2 ticks", "3 ticks"], london.slip, null);
 }
 
+const pieces = {
+  markets: {
+    nav: "#work", back: "#work", backLabel: "Work",
+    kicker: "Sep 2026 – present · Remote",
+    title: "Prediction markets",
+    lede: "Advising a confidential client on whether systematic prediction-market trading can actually be executed.",
+    body: [
+      { text: "The work is the feasibility question: broker infrastructure, APIs, market structure, which data exists, and what the execution constraints rule out." },
+      { text: "I built an execution-aware paper-trading engine around those constraints. It charges fees, waits one second, will not take more than half the displayed depth, and caps position size. A simulated $10,000 book grew to multiple six figures." },
+      { text: "The current work is moving that paper book toward live trading." }
+    ]
+  },
+  predictnow: {
+    nav: "#work", back: "#work", backLabel: "Work",
+    kicker: "Mar 2025 – Oct 2025 · PredictNow.AI",
+    title: "A reinforcement-learning portfolio",
+    lede: "The note I wrote after working with Ernest Chan on a deep reinforcement-learning portfolio.",
+    links: [{ href: "https://www.linkedin.com/posts/benjaminbiweili_ai-aiinfinance-finance-activity-7477515683120091137-LwSt", label: "LinkedIn" }],
+    body: [
+      { text: "Using markets as an environment for deep reinforcement learning is difficult. They are complex and they do not stay still. A lot of proof-of-concept portfolio models cannot beat the risk-adjusted return of simply holding the S&P 500." },
+      { text: "We approached that in three ways." },
+      { kind: "ul", items: [
+        "Imitation learning, to pre-train the policy. The expert data was built to maximise Sharpe, so PPO started from a sensible policy and its exploration was more useful.",
+        "A smaller action space. Eleven S&P sub-indices were grouped into cross-sectional mean-reversion and momentum. That stopped the model fitting noise in single names, and it made the problem smaller.",
+        "A large policy network that was permanently pruned, so the model could scale without keeping every weight."
+      ]},
+      { text: "On its own, from 2014 to mid-2025, the model reached a Sharpe of 0.8, against 0.69 for buying and holding the S&P 500. Paired with a hidden Markov model that switches between risk-on and risk-off, the Sharpe was about 0.98." },
+      { text: "More than 30 variations were tested over ten weeks, with predictive features, unit tests, and lookahead checks. I presented the work to senior stakeholders and to clients including Bloomberg and Citi." },
+      { text: "What stayed with me was the standard of the robustness checks, and keeping the whole pipeline free of lookahead, including while the features were being built." }
+    ]
+  },
+  thesis: {
+    nav: "#projects", back: "#projects", backLabel: "Projects",
+    kicker: "Oct 2026 – present · UCL",
+    title: "World models for financial markets",
+    lede: "Final-year project. Latent market representations, and retrieving a historical state.",
+    body: [
+      { text: "The project is about representing a market in a latent space, and being able to retrieve a past state of it. The point of that retrieval is to name the regime, and to give the feature set a better representation than the raw series." },
+      { text: "It is in progress. Python, in London." }
+    ]
+  },
+  metalabel: {
+    nav: "#projects", back: "#projects", backLabel: "Projects",
+    kicker: "Oct 2026",
+    title: "Does PPO for meta-labelling work?",
+    lede: "Marcos López de Prado’s meta-labelling, recast as a reinforcement-learning agent that takes or skips a signal.",
+    links: [{ href: "https://www.linkedin.com/posts/benjaminbiweili_does-ppo-for-meta-labelling-work-marcos-activity-7519487945255325696-btDp", label: "LinkedIn" }],
+    body: [
+      { text: "Meta-labelling is straightforward. One strategy generates a trade. A second model decides whether to take it, usually with supervised learning." },
+      { text: "I adapted that to reinforcement learning with proximal policy optimisation. Instead of training a classifier on trade labels, I trained an agent to take or skip signals from a tail-risk strategy. That is a hard place to start. Returns vary a lot, and a handful of large trades can dominate. The agent has to learn from that uneven reward." },
+      { text: "At each signal the agent outputs a value between −1 and 1. Below zero, it skips the trade. Otherwise it follows the original strategy." },
+      { text: "I also randomised which training days the environments sampled. Ten environments walking through similar stretches of data would otherwise share almost the same experience, with only the seed differing. Sampling different days spread the strategy’s occasional large outcomes across updates, instead of several environments hitting them together." },
+      { text: "The sequence inside each day stays chronological. Each decision only sees information available at that time, and the randomisation stays inside the training window. It does not pull later evaluation data into training." },
+      { text: "I trained six agents and averaged their outputs for the final take-or-skip decision. Evaluation was a rolling 24-month training window followed by three months out of sample." },
+      { kind: "h", text: "What changed" },
+      { kind: "ul", items: [
+        "Maximum drawdown fell by about 30%.",
+        "Sharpe rose by about 13%.",
+        "The number of trades fell by about 45%.",
+        "Total compounded return fell by about 7%."
+      ]},
+      { text: "It gave up some return to reduce drawdown. The win rate barely moved, so this was not a case of suddenly calling many more winners." },
+      { text: "The features were log returns, volume, time of day, and one strategy-specific indicator. With that little of the strategy itself in the input, the filter improved out-of-sample risk-adjusted performance. That is the part I would reuse: the same take-or-skip agent, on another strategy’s signals." }
+    ]
+  },
+  chess: {
+    nav: "#competitions", back: "#competitions", backLabel: "Competitions",
+    kicker: "Sep 2026 · London",
+    title: "AI Chessathon",
+    lede: "Top 16 of 465 teams in Optiver’s chess and machine-learning hackathon, through to the London final.",
+    links: [{ href: "https://github.com/benbwli/Chessathon", label: "GitHub" }],
+    body: [
+      { text: "The engine is written with Numba. Search is alpha-beta Negamax. The evaluation is a quantised HalfKP NNUE, fine-tuned with DAgger self-play." },
+      { text: "The public repository is the Chessathon submission harness: the agent, the local clock, and the games used to see whether a change helped before uploading it." }
+    ]
+  },
+  battlecode: {
+    nav: "#competitions", back: "#competitions", backLabel: "Competitions",
+    kicker: "Nov 2026 · Cambridge",
+    title: "Cambridge Battlecode",
+    lede: "3rd of 195 in the UK, and 9th of 831 overall. Qualified for the finals.",
+    body: [
+      { text: "The field was sponsored by Hudson River Trading, Jane Street, Citadel, G-Research, QRT, and Anthropic. Qualifying led to the finals, and to an insight event at Hudson River Trading." },
+      { text: "The bot is C++, compiled to WebAssembly, with a fuel budget. Farming is a beam search. Engagement uses imitation learning: gradient-boosted models trained on ranked replays, estimating the probability of a kill and of a death." },
+      { text: "The qualifiers were on 4 and 11 November 2026, and the final on 18 November, on maps the bot had not seen." }
+    ]
+  },
+  pedestrian: {
+    nav: "#projects", back: "#projects", backLabel: "Projects",
+    kicker: "May 2026 · UCL",
+    title: "Safety-aware pedestrian trajectories",
+    lede: "Third-year group project. Conformal prediction inside a deep reinforcement-learning trajectory model.",
+    links: [{ href: "https://github.com/benbwli/drl_for_ptp", label: "GitHub" }],
+    body: [
+      { text: "Conformal prediction went into the reward. The uncertainty-aware safety radius tightened by 0.6% on average, while keeping 95% statistical coverage." },
+      { text: "A variance-based smoother then made consecutive forecasts more consistent. That cut minADE@20 by 6.7%." },
+      { text: "The repository is the training code: a diffusion trajectory model, fine-tuned with reinforcement learning, on the ETH/UCY and Stanford Drone splits." }
+    ]
+  },
+  benchmark: {
+    nav: "#projects", back: "#projects", backLabel: "Projects",
+    kicker: "Mar 2026 · UCL",
+    title: "CNN and language-model benchmark",
+    lede: "A PyTorch harness for comparing convolutional networks and language models on the same footing.",
+    body: [
+      { text: "The harness fine-tuned GPT-2 and ran the convolutional models through the same measurement: accuracy, inference latency, and energy." }
+    ]
+  },
+  ucl: {
+    nav: "#study", back: "#study", backLabel: "Study",
+    kicker: "Sep 2023 – Jun 2027 · London",
+    title: "University College London",
+    lede: "MEng Robotics and Artificial Intelligence. Predicted first.",
+    body: [
+      { text: "The modules closest to the work are machine learning, reinforcement learning, deep learning, data analysis, data structures and algorithms, and modelling and simulation." }
+    ]
+  },
+  stowe: {
+    nav: "#study", back: "#study", backLabel: "Study",
+    kicker: "Sep 2017 – Jun 2022 · Buckingham",
+    title: "Stowe School",
+    lede: "Academic scholar and senior prefect.",
+    body: [
+      { text: "A-levels: Mathematics A*, Further Mathematics A*, Chemistry A*, Biology A." }
+    ]
+  }
+};
+
+function renderPiece(p) {
+  document.getElementById("readBack").href = p.back;
+  document.getElementById("readBack").textContent = p.backLabel;
+  document.getElementById("readKicker").textContent = p.kicker;
+  document.getElementById("readTitle").textContent = p.title;
+  document.getElementById("readLede").textContent = p.lede;
+  const links = document.getElementById("readLinks");
+  links.replaceChildren();
+  (p.links || []).forEach((l) => {
+    const a = document.createElement("a");
+    a.href = l.href;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = l.label;
+    links.appendChild(a);
+  });
+  links.hidden = !p.links;
+  const body = document.getElementById("readBody");
+  body.replaceChildren();
+  p.body.forEach((block) => {
+    if (block.kind === "ul") {
+      const ul = document.createElement("ul");
+      block.items.forEach((t) => {
+        const li = document.createElement("li");
+        li.textContent = t;
+        ul.appendChild(li);
+      });
+      body.appendChild(ul);
+    } else if (block.kind === "h") {
+      const h = document.createElement("h2");
+      h.textContent = block.text;
+      body.appendChild(h);
+    } else {
+      const el = document.createElement("p");
+      el.textContent = block.text;
+      body.appendChild(el);
+    }
+  });
+}
+
 function route() {
   const hash = location.hash;
   const caseId = hash === "#gotobi" || hash === "#london-fix" ? hash : "";
-  const page = hash === "#competitions" ? "competitions" : (hash === "#mosaic" || caseId ? "mosaic" : "home");
+  const piece = pieces[hash.slice(1)];
+  const page = hash === "#competitions" ? "competitions" : (hash === "#mosaic" || caseId ? "mosaic" : (piece ? "read" : "home"));
   home.hidden = page !== "home";
   competitions.hidden = page !== "competitions";
   lab.hidden = page !== "mosaic";
+  read.hidden = page !== "read";
+  if (piece) renderPiece(piece);
   document.querySelectorAll("nav a, a.aside").forEach((a) => {
     const href = a.getAttribute("href");
-    if (href === hash || (page === "mosaic" && href === "#mosaic" && caseId)) a.setAttribute("aria-current", "page");
+    const current = piece ? piece.nav : (page === "mosaic" ? "#mosaic" : hash);
+    if (href === current) a.setAttribute("aria-current", "page");
     else a.removeAttribute("aria-current");
   });
   if (page !== "home") {
