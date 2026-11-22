@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Benjamin Li</title>
-<meta name="description" content="Benjamin Li is an MEng Robotics and Artificial Intelligence student at UCL, working on trading research and machine learning.">
+<meta name="description" content="Benjamin Li is a quantitative researcher who builds robust systematic trading systems. MEng Robotics and Artificial Intelligence at UCL.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,17 +121,28 @@ h2 {
 .item p { margin: 0 0 10px; color: var(--ink-2); max-width: 68ch; }
 .item p:last-child { margin-bottom: 0; }
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
-article.card {
+.card {
   background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
   padding: 24px 24px 22px; display: flex; flex-direction: column; min-height: 220px;
 }
-article.card .when { padding-top: 0; margin-bottom: 14px; }
-article.card h3 {
+.card .when { padding-top: 0; margin-bottom: 14px; }
+.card h3 {
   font-family: "Instrument Serif", Georgia, serif;
   font-weight: 400; font-size: 28px; line-height: 1.1; margin: 0 0 10px;
 }
-article.card p { margin: 0; color: var(--ink-2); font-size: 15px; }
-article.card .foot { margin-top: auto; padding-top: 18px; color: var(--muted); font-size: 13px; }
+.card p { margin: 0; color: var(--ink-2); font-size: 15px; }
+.card .foot { margin-top: auto; padding-top: 18px; color: var(--muted); font-size: 13px; }
+a.case-link { text-decoration: none; color: inherit; }
+a.case-link:hover { border-color: var(--ink); }
+a.case-link .sharpe {
+  margin-top: auto; padding-top: 22px;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: 46px; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+a.case-link .sharpe span {
+  display: block; margin-top: 8px;
+  font-family: Inter, system-ui, sans-serif; font-size: 13px; color: var(--muted);
+}
 .wide { grid-column: 1 / -1; }
 .study { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
 .study article {
@@ -165,7 +176,7 @@ footer a:hover { color: var(--ink); }
 .pods article { border-top: 1px solid var(--ink); padding-top: 12px; }
 .pods h3 { font-size: 15px; margin: 0 0 6px; }
 .pods p { margin: 0; color: var(--ink-2); font-size: 14px; }
-.case { margin-top: 36px; }
+.case { margin-top: 36px; scroll-margin-top: 96px; }
 .case h3 { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 32px; line-height: 1.1; margin: 0 0 10px; }
 .mech { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 16px 0; }
 .mech div { padding: 14px 16px 14px 0; font-size: 14px; color: var(--ink-2); }
@@ -231,6 +242,7 @@ canvas.plot { width: 100%; height: 250px; display: block; }
   button.theme { order: 2; }
   nav { flex-basis: 100%; order: 3; }
   .hero { padding-top: 132px; }
+  .explore { grid-template-columns: 1fr; }
   .mark { width: 72px; height: 72px; }
 }
 </style>
@@ -477,14 +489,33 @@ canvas.plot { width: 100%; height: 250px; display: block; }
 </main>
 <main id="home">
   <section class="hero" id="top">
-    <p class="eyebrow">London</p>
+    <p class="eyebrow">Quantitative research · London</p>
     <h1>Benjamin <em>Li</em></h1>
-    <p class="lede">MEng Robotics &amp; Artificial Intelligence at University College London. I build trading research systems and machine-learning models, and I am writing a thesis on SLAM-inspired world models for financial markets.</p>
+    <p class="lede">I build robust trading systems. A rule is written down before it is tested, every fill pays the tick and the commission, and nothing joins the book until it has cleared a sealed holdout. The machinery around that — data, costs, and the gate — is the work.</p>
     <p class="meta">
-      <span>UCL, 2023–2027</span>
+      <span>UCL, MEng Robotics &amp; Artificial Intelligence, 2023–2027</span>
       <span>English and Mandarin</span>
       <span><a href="mailto:benjamin.li.23@ucl.ac.uk">benjamin.li.23@ucl.ac.uk</a></span>
     </p>
+  </section>
+
+  <section class="block" id="cases">
+    <div class="block-head"><h2>Explore the case studies</h2></div>
+    <p class="lede">Two forced flows from the futures book. Each Sharpe is the holdout, from 2023, after costs.</p>
+    <div class="cards explore">
+      <a class="card case-link" href="#gotobi">
+        <div class="when">Yen future · Tokyo fix</div>
+        <h3>Gotobi</h3>
+        <p>Japanese importers settle on fixed dates. Their banks buy dollars into the 09:55 Tokyo fix, so USD/JPY is pushed up into it.</p>
+        <div class="sharpe">0.24<span>Holdout Sharpe</span></div>
+      </a>
+      <a class="card case-link" href="#london-fix">
+        <div class="when">Pound future · London fix</div>
+        <h3>Month-end London fix</h3>
+        <p>At month-end, customers buy pounds back into the 16:00 London fix, and banks lift GBP/USD to fill those orders.</p>
+        <div class="sharpe">0.67<span>Holdout Sharpe</span></div>
+      </a>
+    </div>
   </section>
 
   <section class="block" id="work">
@@ -831,18 +862,28 @@ function draw() {
 }
 
 function route() {
-  const page = location.hash === "#competitions" || location.hash === "#mosaic" ? location.hash.slice(1) : "home";
+  const hash = location.hash;
+  const caseId = hash === "#gotobi" || hash === "#london-fix" ? hash : "";
+  const page = hash === "#competitions" ? "competitions" : (hash === "#mosaic" || caseId ? "mosaic" : "home");
   home.hidden = page !== "home";
   competitions.hidden = page !== "competitions";
   lab.hidden = page !== "mosaic";
   document.querySelectorAll("nav a, a.aside").forEach((a) => {
-    if (a.getAttribute("href") === location.hash) a.setAttribute("aria-current", "page");
+    const href = a.getAttribute("href");
+    if (href === hash || (page === "mosaic" && href === "#mosaic" && caseId)) a.setAttribute("aria-current", "page");
     else a.removeAttribute("aria-current");
   });
   if (page !== "home") {
-    window.scrollTo(0, 0);
+    const target = caseId ? document.querySelector(caseId) : null;
+    const go = () => {
+      document.documentElement.style.scrollBehavior = "auto";
+      if (target) target.scrollIntoView();
+      else window.scrollTo(0, 0);
+      document.documentElement.style.scrollBehavior = "";
+    };
+    go();
     requestAnimationFrame(() => {
-      window.scrollTo(0, 0);
+      go();
       if (page === "mosaic") requestAnimationFrame(draw);
     });
   }
